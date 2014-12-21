@@ -29,7 +29,7 @@ class Runner {
 
   function saveLocalDatabase() {
     $this->logger->log("Saving local database to '" . $this->options['database'] . "'...");
-    file_put_contents($this->options['database'], json_encode($this->database));
+    file_put_contents($this->options['database'], json_encode($this->database, JSON_PRETTY_PRINT));
   }
 
   function updateGit() {
@@ -147,12 +147,20 @@ class Runner {
 
   }
 
-  function compileStats() {
-    // TODO
+  // temporary, only stored for this run
+  var $stats = array();
 
+  function compileStats() {
+    $stats['summary'] = new SummaryStats($this->database);
+
+    foreach ($stats as $key => $summary) {
+      $this->logger->log("Compiling '$key' statistics...");
+      $this->stats[$key] = $summary->compile();
+    }
   }
 
   function generateHTML() {
+    print_r($this->stats);
     // TODO
   }
 
