@@ -21,7 +21,7 @@ if ($argc < 2) {
 $options = array(
   "root" => $argv[1],
   "output" => "./statgit/",
-  "database" => $argv[1] . "/.statgit.json",
+  "database" => "database.json",
   "skip_git" => false,
   "debug" => false,
 );
