@@ -52,6 +52,10 @@ for ($i = 2; $i < count($argv); $i++) {
   }
 }
 
+if (substr($options['output'], -1) !== "/") {
+  $options['output'] .= "/";
+}
+
 $logger = new Statgit\Logger();
 
 $statgit = new Statgit\Runner($options, $logger);
