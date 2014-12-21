@@ -9,18 +9,141 @@ class Runner {
     $this->logger = $logger;
   }
 
+  function passthru($cmd) {
+    $return = -1;
+    $this->logger->log(">>> " . $cmd, $return);
+    passthru($cmd, $return);
+    if ($return !== 0) {
+      throw new \Exception("passthru '$cmd' returned '$return'");
+    }
+  }
+
+  function loadLocalDatabase() {
+    if (file_exists($this->options["database"])) {
+      $this->logger->log("Loading local database from '" . $this->options['database'] . "'...");
+      $this->database = json_decode(file_get_contents($this->options["database"]), true /* assoc */);
+    } else {
+      $this->database = array();
+    }
+  }
+
+  function saveLocalDatabase() {
+    $this->logger->log("Saving local database to '" . $this->options['database'] . "'...");
+    file_put_contents($this->options['database'], json_encode($this->database));
+  }
+
   function updateGit() {
     $this->logger->log("Pulling latest from remote...");
-    passthru("cd " . escapeshellarg($this->options["root"]) . " && git pull origin master");
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git pull origin master");
   }
 
   function exportLog() {
-    // TODO
+    $this->logger->log("Exporting complete log to JSON...");
 
+    $specialCharacter = "(separator)";
+    $endCharacter = "(end log entry)";
+
+    $formatBits = array(
+      "hash" => "%H",
+      "hash_short" => "%h",
+      "tree_hash" => "%T",
+      "parent_hashes" => "%P",
+      "author_name" => "%an",
+      "author_email" => "%ae",
+      "author_date" => "%ai",
+      "committer_name" => "%cn",
+      "committer_email" => "%ce",
+      "committer_date" => "%ci",
+      "subject" => "%s",
+      "body" => "%b",
+      "commit_notes" => "%N",
+    );
+    $format = implode($specialCharacter, array_values($formatBits)) . $endCharacter;
+    $temp = $this->getTempFile();
+
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git log --reverse --format=\"" . $format . "\" > " . escapeshellarg($temp));
+    $this->logger->log("Reading '$temp'...");
+
+    $contents = file_get_contents($temp);
+    $bits = explode($endCharacter, $contents);
+    $result = array();
+    foreach ($bits as $line) {
+      if (!trim($line)) {
+        continue;
+      }
+
+      $linebits = explode($specialCharacter, trim($line));
+      $row = array();
+      foreach (array_keys($formatBits) as $i => $key) {
+        $row[$key] = $linebits[$i];
+      }
+      $result[] = $row;
+    }
+
+    $this->logger->log("Found " . number_format(count($result)) . " commits");
+
+    // write to database
+    $this->database["commits"] = $result;
+
+    // delete temp file
+    unlink($temp);
+  }
+
+  function getTempFile() {
+    return tempnam(sys_get_temp_dir(), "statgit");
   }
 
   function iterateOverEachCommit() {
-    // TODO
+    if (!isset($this->database["stats"])) {
+      $this->database["stats"] = array();
+    }
+    foreach ($this->database["commits"] as $commit) {
+      if (!isset($this->database['stats'][$commit['hash']])) {
+        $this->logger->log("Checking out commit '" . $commit['hash'] . "'...");
+        $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout " . escapeshellarg($commit['hash']));
+
+        // now lets do some basic stats with cloc
+        $temp = $this->getTempFile();
+        $this->passthru("cloc --csv --quiet " . escapeshellarg($this->options["root"]) . " > " . escapeshellarg($temp));
+
+        $csv = file($temp);
+        $stats = array();
+
+        $i = 0;
+        foreach ($csv as $line) {
+          if (!trim($line)) {
+            continue;
+          }
+
+          if ($i++ == 0) {
+            $rows = str_getcsv(trim($line));
+
+            $languageid = array_search("language", $rows);
+          } else {
+            $columns = str_getcsv(trim($line));
+            $statrow = array();
+            $language = null;
+            foreach ($rows as $j => $value) {
+              if (isset($columns[$j])) {
+                $statrow[$value] = $columns[$j];
+              }
+              if ($j == $languageid) {
+                $language = $columns[$j];
+              }
+            }
+            $stats[$language] = $statrow;
+          }
+        }
+
+        // store
+        $this->database['stats'][$commit['hash']] = $stats;
+        unlink($temp);
+
+        // store database
+        $this->saveLocalDatabase();
+
+      }
+    }
 
   }
 

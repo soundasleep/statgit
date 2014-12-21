@@ -21,6 +21,7 @@ if ($argc < 2) {
 $options = array(
   "root" => $argv[1],
   "output" => "./statgit/",
+  "database" => $argv[1] . "/.statgit.json",
 );
 
 $logger = new Statgit\Logger();
@@ -30,10 +31,12 @@ $statgit = new Statgit\Runner($options, $logger);
 $cwd = getcwd();
 
 // argh this should be wrapped with a finally {} but this requires PHP 5.5+
+$statgit->loadLocalDatabase();
 $statgit->updateGit();
 $statgit->exportLog();
 $statgit->iterateOverEachCommit();
 $statgit->compileStats();
 $statgit->generateHTML();
+$statgit->saveLocalDatabase();
 
 passthru("cd " . escapeshellarg($cwd));
