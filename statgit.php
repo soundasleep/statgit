@@ -22,12 +22,34 @@ $options = array(
   "root" => $argv[1],
   "output" => "./statgit/",
   "database" => $argv[1] . "/.statgit.json",
-  "skip_git" => true,
+  "skip_git" => false,
+  "debug" => false,
 );
 
-// overwrite
-if (isset($argv[2])) {
-  $options['output'] = $argv[2];
+// overwrite options as necessary
+for ($i = 2; $i < count($argv); $i++) {
+  switch ($argv[$i]) {
+    case "--skip-git":
+      $options['skip_git'] = true;
+      continue;
+
+    case "--output":
+      $options['output'] = $argv[$i+1];
+      $i++;
+      continue;
+
+    case "--database":
+      $options['database'] = $argv[$i+1];
+      $i++;
+      continue;
+
+    case "--debug":
+      $options['debug'] = true;
+      continue;
+
+    default:
+      throw new Exception("Unknown argument '" . $argv[$i] . "'");
+  }
 }
 
 $logger = new Statgit\Logger();
