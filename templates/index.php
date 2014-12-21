@@ -68,7 +68,7 @@
     var options = {
       'width': 600,
       'height': 300,
-      'chartArea': {'width': '80%', 'height': '70%', 'left': 0, 'top': 0}
+      'chartArea': {'width': '80%', 'height': '70%', 'left': 50, 'top': 25}
     };
 
     // Instantiate and draw our chart, passing in some options.

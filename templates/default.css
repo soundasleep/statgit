@@ -1,4 +1,19 @@
-html, body {
+html {
+  margin: 0;
+  padding: 0;
   font-family: Arial;
+  font-size: 95%;
 }
 
+body {
+  margin: 20px;
+  padding: 0;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-bottom: 5px;
+}
