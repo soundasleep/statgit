@@ -85,4 +85,8 @@ class HtmlGenerator {
     return $total;
   }
 
+  function renderLineChart($rows, $id) {
+    require(__DIR__ . "/../templates/line_chart.php");
+  }
+
 }
