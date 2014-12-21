@@ -153,6 +153,7 @@ class Runner {
   function compileStats() {
     $stats['summary'] = new SummaryStats($this->database);
     $stats['loc'] = new LinesOfCodeStats($this->database);
+    $stats['tagcloud'] = new TagCloudStats($this->database);
 
     foreach ($stats as $key => $summary) {
       $this->logger->log("Compiling '$key' statistics...");
