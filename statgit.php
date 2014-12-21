@@ -25,6 +25,11 @@ $options = array(
   "skip_git" => true,
 );
 
+// overwrite
+if (isset($argv[2])) {
+  $options['output'] = $argv[2];
+}
+
 $logger = new Statgit\Logger();
 
 $statgit = new Statgit\Runner($options, $logger);
