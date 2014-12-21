@@ -24,6 +24,9 @@ class SummaryStats extends StatisticsGenerator {
     $data['first_hash'] = $firstlast['first']['hash'];
     $data['last_hash'] = $firstlast['last']['hash'];
 
+    $data['remote'] = $this->getRemote();
+    $data['name'] = $this->getName();
+
     return $data;
   }
 
@@ -67,6 +70,24 @@ class SummaryStats extends StatisticsGenerator {
     }
 
     return array('first' => $first, 'last' => $last);
+  }
+
+  function getRemote() {
+    if (isset($this->database['remotes']['origin'])) {
+      return $this->database['remotes']['origin'];
+    } else {
+      return null;
+    }
+  }
+
+  function getName() {
+    $remote = $this->getRemote();
+    $bits = explode("/", $remote);
+    $name = array();
+    for ($j = 0, $i = count($bits) - 1; $i >= 0, $j < 2; $j++, $i--) {
+      $name[] = $bits[$i];
+    }
+    return implode("/", $name);
   }
 
 }

@@ -93,6 +93,32 @@ class Runner {
     return tempnam(sys_get_temp_dir(), "statgit");
   }
 
+  function exportRemotes() {
+    $this->logger->log("Exporting remotes...");
+
+    $temp = $this->getTempFile();
+
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git remote -v > " . escapeshellarg($temp));
+    $this->logger->log("Reading '$temp'...");
+
+    if (!isset($this->database['remotes'])) {
+      $this->database['remotes'] = array();
+    }
+
+    $remotes = file($temp);
+    foreach ($remotes as $line) {
+      $line = trim(preg_replace("/\\s\\s+/", " ", str_replace("\t", " ", $line)));
+      if (substr($line, -strlen("(fetch)")) == "(fetch)") {
+        $remote = explode(" ", $line, 2);
+        $remote[1] = trim(str_replace(" (fetch)", "", $remote[1]));
+        $this->database['remotes'][$remote[0]] = $remote[1];
+      }
+    }
+
+    // delete temp file
+    unlink($temp);
+  }
+
   function iterateOverEachCommit() {
     if (!isset($this->database["stats"])) {
       $this->database["stats"] = array();

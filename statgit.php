@@ -34,6 +34,7 @@ $cwd = getcwd();
 $statgit->loadLocalDatabase();
 $statgit->updateGit();
 $statgit->exportLog();
+$statgit->exportRemotes();
 $statgit->iterateOverEachCommit();
 $statgit->compileStats();
 $statgit->generateHTML();

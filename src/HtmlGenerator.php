@@ -27,10 +27,21 @@ class HtmlGenerator {
     // TODO delete all files within it?
 
     $this->generateFile("index");
+
+    // copy over CSS
+    copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
   }
 
   function generateFile($template) {
     $this->logger->log("Generating '$template.html'...");
+
+    switch ($template) {
+      case "index":
+        $title = "Statgit - " . $this->stats['summary']['name'];
+        break;
+      default:
+        $title = "Statgit";
+    }
 
     ob_start();
 
