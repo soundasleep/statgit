@@ -8,7 +8,7 @@
   <dd><?php echo $this->linkCommit($stats['summary']['last_hash']); ?></dd>
 
   <dt>Report period</dt>
-  <dd><?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?> to <?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?></dd>
+  <dd><?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?> to <?php echo date('Y-m-d', strtotime($stats['summary']['last_commit'])); ?></dd>
 
   <dt>Total files</dt>
   <dd><?php echo number_format($stats['summary']['total_files']); ?></dd>
