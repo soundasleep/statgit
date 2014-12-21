@@ -17,3 +17,26 @@ dt {
 dd {
   margin-bottom: 5px;
 }
+
+ul.tag_cloud {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tag_cloud li {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.tag100 { font-size: 250%; }
+.tag90 { font-size: 235%; }
+.tag80 { font-size: 220%; }
+.tag70 { font-size: 205%; }
+.tag60 { font-size: 190%; }
+.tag50 { font-size: 175%; }
+.tag40 { font-size: 160%; }
+.tag30 { font-size: 145%; }
+.tag20 { font-size: 130%; }
+.tag10 { font-size: 115%; }
+.tag0 { font-size: 100%; }

@@ -35,3 +35,29 @@ foreach ($database['commits'] as $commit) {
 $this->renderLineChart($rows, "chart_loc");
 
 ?>
+
+<h2>Tag Cloud of Words in Commit Log Messages</h2>
+
+<ul class="tag_cloud">
+<?php
+function generateMinMaxClass($min, $max, $value) {
+  $pct = ($value - $min) / ($max - $min);
+
+  return "tag" . sprintf("%01d", $pct * 10) . "0";
+}
+
+$max = 1;
+$min = 1;
+foreach ($stats['tagcloud'] as $value) {
+  $max = max($max, $value);
+  $min = min($min, $value);
+}
+
+$tags = $stats['tagcloud'];
+ksort($tags);
+
+foreach ($tags as $word => $count) {
+  echo "<li class=\"" . generateMinMaxClass($min, $max, $count) . "\">" . htmlspecialchars($word) . "</li>";
+}
+?>
+</ul>
