@@ -4,8 +4,8 @@
   <dt>Generated</dt>
   <dd><?php echo date('r'); ?></dd>
 
-  <dt>Latest revision</dt>
-  <dd><?php echo $this->linkRevision($stats['summary']['last_hash']); ?></dd>
+  <dt>Latest commit</dt>
+  <dd><?php echo $this->linkCommit($stats['summary']['last_hash']); ?></dd>
 
   <dt>Report period</dt>
   <dd><?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?> to <?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?></dd>
@@ -20,6 +20,14 @@
   <dd><?php echo number_format($stats['summary']['author_count']); ?></dd>
 
 </dl>
+
+<ul class="navigation">
+  <li>Developers</li>
+  <li><a href="loc.html">Lines of code</a></li>
+  <li>Languages</li>
+  <li>File statistics</li>
+  <li>Churn</li>
+</ul>
 
 <h2>Lines of Code</h2>
 
@@ -61,3 +69,6 @@ foreach ($tags as $word => $count) {
 }
 ?>
 </ul>
+
+<div style="clear:both;"></div>
+<a href="cloud.html">more...</a>

@@ -40,3 +40,17 @@ ul.tag_cloud li {
 .tag20 { font-size: 130%; }
 .tag10 { font-size: 115%; }
 .tag0 { font-size: 100%; }
+
+.breadcrumb {
+  font-size: 80%;
+}
+
+.breadcrumb + h1 {
+  margin-top: 0;
+}
+
+.github {
+  background: url('https://raw.githubusercontent.com/soundasleep/statgit/master/images/GitHub-Mark-32px.png') top left no-repeat;
+  background-size: 16px 16px;
+  padding-left: 20px;
+}

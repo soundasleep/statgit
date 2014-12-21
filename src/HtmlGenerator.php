@@ -27,6 +27,7 @@ class HtmlGenerator {
     // TODO delete all files within it?
 
     $this->generateFile("index");
+    $this->generateFile("loc");
 
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
@@ -38,6 +39,9 @@ class HtmlGenerator {
     switch ($template) {
       case "index":
         $title = "Statgit - " . $this->stats['summary']['name'];
+        break;
+      case "loc":
+        $title = "Statgit - Lines of Code";
         break;
       default:
         $title = "Statgit";
@@ -65,7 +69,7 @@ class HtmlGenerator {
   }
 
 
-  function linkRevision($r) {
+  function linkCommit($r) {
     if ($this->isGithub()) {
       return $this->linkTo("https://github.com/" . $this->stats['summary']['name'] . "/commit/" . $r, $r, array('github'));
     } else {
@@ -85,7 +89,7 @@ class HtmlGenerator {
     return $total;
   }
 
-  function renderLineChart($rows, $id) {
+  function renderLineChart($rows, $id, $width = 600, $height = 400) {
     require(__DIR__ . "/../templates/line_chart.php");
   }
 

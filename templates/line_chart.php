@@ -33,8 +33,8 @@
 
     // Set chart options
     var options = {
-      'width': 600,
-      'height': 300,
+      'width': <?php echo $width; ?>,
+      'height': <?php echo $height; ?>,
       'chartArea': {'width': '80%', 'height': '70%', 'left': 50, 'top': 25}
     };
 
