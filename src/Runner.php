@@ -193,6 +193,8 @@ class Runner {
     $generator = new HtmlGenerator($this->database, $this->stats, $this->logger, $this->options['output']);
     $generator->generate();
 
+    print_r($this->stats);
+
   }
 
 }

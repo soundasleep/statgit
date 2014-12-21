@@ -59,4 +59,21 @@ class HtmlGenerator {
 
   }
 
+  function isGithub() {
+    return isset($this->database['remotes']['origin']) && strpos($this->database['remotes']['origin'], "github.com") !== false;
+  }
+
+
+  function linkRevision($r) {
+    if ($this->isGithub()) {
+      return $this->linkTo("https://github.com/" . $this->stats['summary']['name'] . "/commit/" . $r, $r, array('github'));
+    } else {
+      return $r;
+    }
+  }
+
+  function linkTo($url, $title, $classes = array()) {
+    return "<a href=\"" . htmlspecialchars($url) . "\" class=\"" . implode(" ", $classes) . "\">" . htmlspecialchars($title) . "</a>";
+  }
+
 }

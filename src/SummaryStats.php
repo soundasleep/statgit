@@ -27,6 +27,9 @@ class SummaryStats extends StatisticsGenerator {
     $data['remote'] = $this->getRemote();
     $data['name'] = $this->getName();
 
+    $data['total_files'] = $this->getTotalFiles($data['last_hash']);
+    $data['total_loc'] = $this->getTotalLoc($data['last_hash']);
+
     return $data;
   }
 
@@ -88,6 +91,24 @@ class SummaryStats extends StatisticsGenerator {
       $name[] = $bits[$i];
     }
     return implode("/", $name);
+  }
+
+  function getTotalFiles($hash) {
+    $total = 0;
+    $stats = $this->database['stats'][$hash];
+    foreach ($stats as $language) {
+      $total += $language['files'];
+    }
+    return $total;
+  }
+
+  function getTotalLoc($hash) {
+    $total = 0;
+    $stats = $this->database['stats'][$hash];
+    foreach ($stats as $language) {
+      $total += $language['code'];
+    }
+    return $total;
   }
 
 }
