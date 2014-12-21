@@ -162,9 +162,11 @@ class Runner {
   }
 
   function generateHTML() {
-    print_r($this->stats);
-    // TODO
-  }
+    $this->logger->log("Generating HTML...");
 
+    $generator = new HtmlGenerator($this->database, $this->stats, $this->logger, $this->options['output']);
+    $generator->generate();
+
+  }
 
 }
