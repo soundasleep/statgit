@@ -1,5 +1,6 @@
 {
   "name": "soundasleep/statgit",
+  "description": "Generate Git development statistics",
   "autoload": {
     "psr-4": {
       "Statgit\\": "src"
