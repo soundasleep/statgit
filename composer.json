@@ -1,0 +1,8 @@
+{
+  "name": "soundasleep/statgit",
+  "autoload": {
+    "psr-4": {
+      "Statgit\\": "src"
+    }
+  }
+}
