@@ -25,7 +25,7 @@
   <li>Developers (coming soon)</li>
   <li><a href="loc.html">Lines of code</a></li>
   <li>Languages (coming soon)</li>
-  <li>File statistics (coming soon)</li>
+  <li><a href="files.html">File statistics</a></li>
   <li>Churn (coming soon)</li>
 </ul>
 
@@ -40,7 +40,7 @@ foreach ($database['commits'] as $commit) {
   $rows[date('Y-m-d', strtotime($date))] = array($date, $loc);
 }
 
-$this->renderLineChart($rows, "chart_loc");
+$this->renderLineChart($rows, "chart_loc", "LOC");
 
 ?>
 

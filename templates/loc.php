@@ -26,6 +26,6 @@ foreach ($database['commits'] as $commit) {
   $rows[date('Y-m-d', strtotime($date))] = array($date, $loc);
 }
 
-$this->renderLineChart($rows, "chart_loc", 800, 600);
+$this->renderLineChart($rows, "chart_loc", "LOC", 800, 600);
 
 ?>

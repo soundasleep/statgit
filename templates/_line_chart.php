@@ -1,4 +1,4 @@
-<div id="<?php echo $id; ?>"></div>
+<div id="<?php echo $id; ?>" style="width: <?php echo $width; ?>px; height: <?php echo $height; ?>px;"></div>
 
 <script type="text/javascript">
   // Load the Visualization API and the piechart package.
@@ -15,7 +15,7 @@
     // Create the data table.
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'Date');
-    data.addColumn('number', 'LOC');
+    data.addColumn('number', "<?php echo $title; ?>");
 
     data.addRows([
       <?php
@@ -33,9 +33,10 @@
 
     // Set chart options
     var options = {
-      'width': <?php echo $width; ?>,
-      'height': <?php echo $height; ?>,
-      'chartArea': {'width': '80%', 'height': '70%', 'left': 50, 'top': 25}
+      width: <?php echo $width; ?>,
+      height: <?php echo $height; ?>,
+      vAxis: {minValue: 0},
+      chartArea: {width: '80%', height: '70%', left: 50, top: 25}
     };
 
     // Instantiate and draw our chart, passing in some options.

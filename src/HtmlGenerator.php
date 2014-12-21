@@ -28,6 +28,7 @@ class HtmlGenerator {
 
     $this->generateFile("index");
     $this->generateFile("loc");
+    $this->generateFile("files");
 
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
@@ -43,6 +44,9 @@ class HtmlGenerator {
         break;
       case "loc":
         $title = "Statgit - Lines of Code";
+        break;
+      case "files":
+        $title = "Statgit - File Statistics";
         break;
       default:
         $title = "Statgit";
@@ -89,8 +93,16 @@ class HtmlGenerator {
     return $total;
   }
 
-  function renderLineChart($rows, $id, $width = 600, $height = 400) {
-    require(__DIR__ . "/../templates/line_chart.php");
+  function getTotalFiles($stats) {
+    $total = 0;
+    foreach ($stats as $language) {
+      $total += $language['files'];
+    }
+    return $total;
+  }
+
+  function renderLineChart($rows, $id, $title, $width = 600, $height = 400) {
+    require(__DIR__ . "/../templates/_line_chart.php");
   }
 
 }
