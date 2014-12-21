@@ -47,6 +47,7 @@ class HtmlGenerator {
 
     // lets use PHP to make our lives easier!
     $stats = $this->stats;
+    $database = $this->database;
     require(__DIR__ . "/../templates/header.php");
     require(__DIR__ . "/../templates/" . $template . ".php");
     require(__DIR__ . "/../templates/footer.php");
@@ -74,6 +75,14 @@ class HtmlGenerator {
 
   function linkTo($url, $title, $classes = array()) {
     return "<a href=\"" . htmlspecialchars($url) . "\" class=\"" . implode(" ", $classes) . "\">" . htmlspecialchars($title) . "</a>";
+  }
+
+  function getTotalLoc($stats) {
+    $total = 0;
+    foreach ($stats as $language) {
+      $total += $language['code'];
+    }
+    return $total;
   }
 
 }

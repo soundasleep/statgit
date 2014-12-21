@@ -90,7 +90,7 @@ class SummaryStats extends StatisticsGenerator {
     for ($j = 0, $i = count($bits) - 1; $i >= 0, $j < 2; $j++, $i--) {
       $name[] = $bits[$i];
     }
-    return implode("/", $name);
+    return implode("/", array_reverse($name));
   }
 
   function getTotalFiles($hash) {
