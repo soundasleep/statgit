@@ -22,11 +22,11 @@
 </dl>
 
 <ul class="navigation">
-  <li>Developers</li>
+  <li>Developers (coming soon)</li>
   <li><a href="loc.html">Lines of code</a></li>
-  <li>Languages</li>
-  <li>File statistics</li>
-  <li>Churn</li>
+  <li>Languages (coming soon)</li>
+  <li>File statistics (coming soon)</li>
+  <li>Churn (coming soon)</li>
 </ul>
 
 <h2>Lines of Code</h2>
@@ -69,6 +69,3 @@ foreach ($tags as $word => $count) {
 }
 ?>
 </ul>
-
-<div style="clear:both;"></div>
-<a href="cloud.html">more...</a>
