@@ -29,7 +29,11 @@ class Runner {
 
   function saveLocalDatabase() {
     $this->logger->log("Saving local database to '" . $this->options['database'] . "'...");
-    file_put_contents($this->options['database'], json_encode($this->database, JSON_PRETTY_PRINT));
+    $args = 0;
+    if (defined('JSON_PRETTY_PRINT')) {
+      $args = JSON_PRETTY_PRINT;
+    }
+    file_put_contents($this->options['database'], json_encode($this->database, $args));
   }
 
   function updateGit() {
