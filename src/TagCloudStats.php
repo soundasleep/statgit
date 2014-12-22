@@ -20,6 +20,10 @@ class TagCloudStats extends StatisticsGenerator {
 
     foreach ($this->database['commits'] as $commit) {
       $words = strtolower($commit['subject'] . " " . $commit['body']);
+
+      // remove any 'git-svn-id: ' lines
+      $words = preg_replace("/git-svn-id: .+/", "", $words);
+
       $words = trim(preg_replace("/\\s\\s+/i", " ", $words));
 
       $words = preg_split("/[^\\w]+/i", $words);  // TODO do we want to preg_split based on word boundaries instead?

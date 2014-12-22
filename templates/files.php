@@ -26,7 +26,7 @@ $this->renderLineChart($rows, "chart_files", "Files", 800, 600);
 
 ?>
 
-<h2>Average File Size</h2>
+<h2>Average Lines of Code per File</h2>
 
 <?php
 
