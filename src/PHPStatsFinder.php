@@ -12,8 +12,9 @@ class PHPStatsFinder extends \PhpParser\NodeVisitorAbstract {
   var $traverser;
   var $parser;
 
-  function __construct($root) {
+  function __construct($root, $logger) {
     $this->root = $root;
+    $this->logger = $logger;
   }
 
   /**
@@ -52,8 +53,13 @@ class PHPStatsFinder extends \PhpParser\NodeVisitorAbstract {
             $this->iterateOver($dir . "/" . $entry);
           } else if ($this->isPHPFile($entry)) {
             $code = file_get_contents($dir . "/" . $entry);
-            $stmts = $this->parser->parse($code);
-            $this->traverser->traverse($stmts);
+            try {
+              $stmts = $this->parser->parse($code);
+              $this->traverser->traverse($stmts);
+            } catch (\PhpParser\Error $e) {
+              // in the case of parse error, ignore this file and continue
+              $this->logger->log("Could not parse '" . $dir . "/" . $entry . "': " . $e->getMessage());
+            }
           }
         }
       }

@@ -188,7 +188,7 @@ class Runner {
           $this->checkOut($commit['hash']);
 
           // find PHP stats
-          $phpstats = new PHPStatsFinder($this->options["root"]);
+          $phpstats = new PHPStatsFinder($this->options["root"], $this->logger);
           $this->logger->log("Generating PHP statistics...");
           $this->database['phpstats'][$commit['hash']] = $phpstats->compile();
 
