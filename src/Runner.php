@@ -123,14 +123,22 @@ class Runner {
     unlink($temp);
   }
 
+  function checkOut($hash) {
+    $this->logger->log("Checking out commit '" . $hash . "'...");
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout " . escapeshellarg($hash));
+  }
+
   function iterateOverEachCommit() {
     if (!isset($this->database["stats"])) {
       $this->database["stats"] = array();
     }
+    if (!isset($this->database["phpstats"])) {
+      $this->database["phpstats"] = array();
+    }
+
     foreach ($this->database["commits"] as $commit) {
       if (!isset($this->database['stats'][$commit['hash']])) {
-        $this->logger->log("Checking out commit '" . $commit['hash'] . "'...");
-        $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout " . escapeshellarg($commit['hash']));
+        $this->checkOut($commit['hash']);
 
         // now lets do some basic stats with cloc
         $temp = $this->getTempFile();
@@ -173,6 +181,22 @@ class Runner {
         $this->saveLocalDatabase();
 
       }
+
+      // if there were any PHP files
+      if (isset($this->database['stats'][$commit['hash']]['PHP'])) {
+        if (!isset($this->database['phpstats'][$commit['hash']])) {
+          $this->checkOut($commit['hash']);
+
+          // find PHP stats
+          $phpstats = new PHPStatsFinder($this->options["root"]);
+          $this->database['phpstats'][$commit['hash']] = $phpstats->compile();
+
+          // store database
+          $this->saveLocalDatabase();
+
+        }
+      }
+
     }
 
   }

@@ -71,3 +71,7 @@ if (!$options['skip_git']) {
 $statgit->compileStats();
 $statgit->generateHTML();
 $statgit->saveLocalDatabase();
+
+function something() {
+  // hello, world
+}

@@ -5,5 +5,8 @@
     "psr-4": {
       "Statgit\\": "src"
     }
+  },
+  "require": {
+    "nikic/php-parser": "~1.0.2"
   }
 }

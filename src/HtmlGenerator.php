@@ -30,6 +30,7 @@ class HtmlGenerator {
     $this->generateFile("loc");
     $this->generateFile("files");
     $this->generateFile("languages");
+    $this->generateFile("php");
 
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
@@ -51,6 +52,9 @@ class HtmlGenerator {
         break;
       case "languages":
         $title = "Statgit - Language Statistics";
+        break;
+      case "php":
+        $title = "Statgit - PHP Statistics";
         break;
       default:
         $title = "Statgit";

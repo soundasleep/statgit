@@ -26,6 +26,9 @@
   <li><a href="loc.html">Lines of code</a></li>
   <li><a href="languages.html">Language statistics</a></li>
   <li><a href="files.html">File statistics</a></li>
+  <?php if ($database['phpstats']) { ?>
+    <li><a href="php.html">PHP statistics</a></li>
+  <?php } ?>
   <li>Churn (coming soon)</li>
 </ul>
 
