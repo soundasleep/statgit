@@ -61,3 +61,32 @@ ul.tag_cloud li {
   font-size: 90%;
   color: #666;
 }
+
+table.statistics {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+table.statistics th, table.statistics td {
+  padding: 4px 6px;
+}
+
+table.statistics thead {
+  background: #eee;
+  border-bottom: 1px solid #ccc;
+}
+
+table.statistics tfoot {
+  background: #eee;
+  border-top: 1px solid #ccc;
+}
+
+table.statistics tr:nth-child(even) {
+  background: #eef;
+}
+
+table.statistics tbody th,
+table.statistics thead th:first-of-type,
+table.statistics tfoot th:first-of-type {
+  border-right: 1px solid #ccc;
+}

@@ -7,9 +7,20 @@
   <dt>Total languages</dt>
   <dd><?php echo number_format(count($database['stats'][$stats['summary']['last_hash']])); ?></dd>
 
-  <dt>Most used language</dt>
-  <dd><?php echo $stats['summary']['language_top']; ?> with <?php echo number_format($stats['summary']['language_top_loc']); ?> lines of code
-    (<?php echo sprintf("%0.1f%%", 100 * $stats['summary']['language_top_loc'] / $stats['summary']['total_loc']); ?>)</dd>
+  <dt>Lines</dt>
+  <dd><?php echo number_format($stats['summary']['total_lines']); ?></dd>
+
+  <dt>Lines of code</dt>
+  <dd><?php echo number_format($stats['summary']['total_loc']); ?>
+    (<?php echo sprintf("%0.1f%%", 100 * $stats['summary']['total_loc'] / $stats['summary']['total_lines']); ?>)</dd>
+
+  <dt>Lines of comments</dt>
+  <dd><?php echo number_format($stats['summary']['total_comments']); ?>
+    (<?php echo sprintf("%0.1f%%", 100 * $stats['summary']['total_comments'] / $stats['summary']['total_lines']); ?>)</dd>
+
+  <dt>Blank lines</dt>
+  <dd><?php echo number_format($stats['summary']['total_blanks']); ?>
+    (<?php echo sprintf("%0.1f%%", 100 * $stats['summary']['total_blanks'] / $stats['summary']['total_lines']); ?>)</dd>
 </dl>
 
 <?php
@@ -24,16 +35,16 @@ $this->renderPieChart($rows, "chart_languages", "Lines of Code");
 
 ?>
 
-<table>
+<table class="statistics">
   <thead>
-    <tr><th>Language</th><th>Files</th><th>Lines of Code</th><th>LOC per File</th><th>Comments</th><th>Comments per File</th><th>Blank</th><th>Blank per File</th></tr>
+    <tr><th>Language</th><th>Files</th><th>Lines of Code</th><th>LOC per File</th><th>Comments</th><th>Comments per File</th><th>Blank Lines</th><th>Blank Lines per File</th></tr>
   </thead>
   <tbody>
 <?php
 
 foreach ($commit as $language => $value) {
   echo "<tr>";
-  echo "<td>" . htmlspecialchars($language) . "</td>";
+  echo "<th>" . htmlspecialchars($language) . "</th>";
   echo "<td>" . number_format($value['files']) . " (" . sprintf("%0.1f%%", 100 * $value['files'] / $stats['summary']['total_files']) . ")</td>";
   echo "<td>" . number_format($value['code']) . " (" . sprintf("%0.1f%%", 100 * $value['code'] / $stats['summary']['total_loc']) . ")</td>";
   echo "<td>" . number_format($value['code'] / $value['files'], 1) . "</td>";
@@ -46,4 +57,16 @@ foreach ($commit as $language => $value) {
 
 ?>
   </tbody>
+  <tfoot>
+    <tr>
+      <th>Total</th>
+      <td><?php echo number_format($stats['summary']['total_files']); ?></td>
+      <td><?php echo number_format($stats['summary']['total_loc']); ?></td>
+      <td><?php echo number_format($stats['summary']['total_loc'] / $stats['summary']['total_files'], 1); ?></td>
+      <td><?php echo number_format($stats['summary']['total_comments']); ?></td>
+      <td><?php echo number_format($stats['summary']['total_comments'] / $stats['summary']['total_files'], 1); ?></td>
+      <td><?php echo number_format($stats['summary']['total_blanks']); ?></td>
+      <td><?php echo number_format($stats['summary']['total_blanks'] / $stats['summary']['total_files'], 1); ?></td>
+    </tr>
+  </tfoot>
 </table>

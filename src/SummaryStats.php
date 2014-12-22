@@ -31,6 +31,7 @@ class SummaryStats extends StatisticsGenerator {
     $data['total_loc'] = $this->getTotalLoc($data['last_hash']);
     $data['total_comments'] = $this->getTotalComments($data['last_hash']);
     $data['total_blanks'] = $this->getTotalBlanks($data['last_hash']);
+    $data['total_lines'] = $data['total_loc'] + $data['total_comments'] + $data['total_blanks'];
 
     $top = $this->getTopLanguage($data['last_hash']);
     $data['language_top'] = $top['language'];
