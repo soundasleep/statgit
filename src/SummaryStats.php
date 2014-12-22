@@ -29,6 +29,12 @@ class SummaryStats extends StatisticsGenerator {
 
     $data['total_files'] = $this->getTotalFiles($data['last_hash']);
     $data['total_loc'] = $this->getTotalLoc($data['last_hash']);
+    $data['total_comments'] = $this->getTotalComments($data['last_hash']);
+    $data['total_blanks'] = $this->getTotalBlanks($data['last_hash']);
+
+    $top = $this->getTopLanguage($data['last_hash']);
+    $data['language_top'] = $top['language'];
+    $data['language_top_loc'] = $top['code'];
 
     return $data;
   }
@@ -109,6 +115,35 @@ class SummaryStats extends StatisticsGenerator {
       $total += $language['code'];
     }
     return $total;
+  }
+
+  function getTotalComments($hash) {
+    $total = 0;
+    $stats = $this->database['stats'][$hash];
+    foreach ($stats as $language) {
+      $total += $language['comment'];
+    }
+    return $total;
+  }
+
+  function getTotalBlanks($hash) {
+    $total = 0;
+    $stats = $this->database['stats'][$hash];
+    foreach ($stats as $language) {
+      $total += $language['blank'];
+    }
+    return $total;
+  }
+
+  function getTopLanguage($hash) {
+    $languages = array_values($this->database['stats'][$hash]);
+    $top = $languages[0];
+    foreach ($languages as $lang) {
+      if ($lang['code'] > $top['code']) {
+        $top = $lang;
+      }
+    }
+    return $top;
   }
 
 }

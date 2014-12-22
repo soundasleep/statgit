@@ -24,7 +24,7 @@
 <ul class="navigation">
   <li>Developers (coming soon)</li>
   <li><a href="loc.html">Lines of code</a></li>
-  <li>Languages (coming soon)</li>
+  <li><a href="languages.html">Language statistics</a></li>
   <li><a href="files.html">File statistics</a></li>
   <li>Churn (coming soon)</li>
 </ul>
@@ -40,7 +40,7 @@ foreach ($database['commits'] as $commit) {
   $rows[date('Y-m-d', strtotime($date))] = array($date, $loc);
 }
 
-$this->renderLineChart($rows, "chart_loc", "Lines of Code");
+$this->renderLineChart($rows, "chart_loc", "LOC");
 
 ?>
 
@@ -54,7 +54,7 @@ foreach ($commit as $language => $value) {
   $rows[$language] = $value['code'];
 }
 
-$this->renderPieChart($rows, "chart_languages", "LOC");
+$this->renderPieChart($rows, "chart_languages", "Lines of Code");
 
 ?>
 
