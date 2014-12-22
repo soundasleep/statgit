@@ -189,7 +189,10 @@ class Runner {
 
           // find PHP stats
           $phpstats = new PHPStatsFinder($this->options["root"]);
+          $this->logger->log("Generating PHP statistics...");
           $this->database['phpstats'][$commit['hash']] = $phpstats->compile();
+
+          $this->logger->log("Found " . number_format($this->database['phpstats'][$commit['hash']]['statements']) . " statements");
 
           // store database
           $this->saveLocalDatabase();
