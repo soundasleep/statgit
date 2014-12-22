@@ -105,4 +105,8 @@ class HtmlGenerator {
     require(__DIR__ . "/../templates/_line_chart.php");
   }
 
+  function renderPieChart($rows, $id, $title, $width = 400, $height = 300) {
+    require(__DIR__ . "/../templates/_pie_chart.php");
+  }
+
 }

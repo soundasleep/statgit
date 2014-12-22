@@ -40,7 +40,21 @@ foreach ($database['commits'] as $commit) {
   $rows[date('Y-m-d', strtotime($date))] = array($date, $loc);
 }
 
-$this->renderLineChart($rows, "chart_loc", "LOC");
+$this->renderLineChart($rows, "chart_loc", "Lines of Code");
+
+?>
+
+<h2>Languages</h2>
+
+<?php
+
+$rows = array();
+$commit = $database['stats'][$stats['summary']['last_hash']];
+foreach ($commit as $language => $value) {
+  $rows[$language] = $value['code'];
+}
+
+$this->renderPieChart($rows, "chart_languages", "LOC");
 
 ?>
 
