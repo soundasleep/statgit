@@ -70,3 +70,33 @@ foreach ($commit as $language => $value) {
     </tr>
   </tfoot>
 </table>
+
+<h2>Language History</h2>
+
+<?php
+
+// first find all languages ever used
+$languages = array();
+foreach ($database['stats'] as $commit) {
+  $languages = array_unique(array_merge(array_keys($commit), $languages));
+}
+
+$rows = array();
+foreach ($database['commits'] as $commit) {
+  $date = $commit['author_date'];
+
+  $row = array(date('Y-m-d', strtotime($date)));
+  foreach ($languages as $i => $lang) {
+    $row[] = 0;
+  }
+
+  foreach ($database['stats'][$commit['hash']] as $language => $value) {
+    $row[array_search($language, $languages) + 1] = $value['code'];
+  }
+
+  $rows[] = $row;
+}
+
+$this->renderStackedAreaChart($rows, $languages, "chart_history", "Lines of Code", 800, 600);
+
+?>
