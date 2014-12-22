@@ -28,7 +28,7 @@ class TagCloudStats extends StatisticsGenerator {
 
       $words = preg_split("/[^\\w]+/i", $words);  // TODO do we want to preg_split based on word boundaries instead?
       foreach ($words as $w) {
-        if ($w) {
+        if (strlen($w) >= 3 /* ignore connecting words */) {
           if (!isset($allwords[$w])) {
             $allwords[$w] = array('word' => $w, 'count' => 0);
           }
@@ -47,7 +47,7 @@ class TagCloudStats extends StatisticsGenerator {
     });
 
     // get the top N
-    for ($i = 0; $i < 30 && $i < count($allwords); $i++) {
+    for ($i = 0; $i < 50 && $i < count($allwords); $i++) {
       $data[$allwords[$i]['word']] = $allwords[$i]['count'];
     }
 
