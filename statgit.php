@@ -64,6 +64,7 @@ $statgit = new Statgit\Runner($options, $logger);
 $statgit->loadLocalDatabase();
 if (!$options['skip_git']) {
   $statgit->updateGit();
+  $statgit->updateFiles();
   $statgit->exportLog();
   $statgit->exportRemotes();
   $statgit->iterateOverEachCommit();

@@ -41,6 +41,30 @@ class Runner {
     $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git pull origin master");
   }
 
+  // get a list of all files that exist
+  function updateFiles() {
+    $this->logger->log("Finding files...");
+    $this->database["files"] = $this->findAllFiles($this->options["root"]);
+    $this->logger->log("Found " . number_format(count($this->database["files"])) . " files");
+  }
+
+  function findAllFiles($dir) {
+    $result = array();
+    if ($handle = opendir($dir)) {
+      while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != ".." && $entry != ".git") {
+          if (is_dir($dir . "/" . $entry)) {
+            $result = array_merge($result, $this->findAllFiles($dir . "/" . $entry));
+          } else {
+            $result[$dir . "/" . $entry] = filesize($dir . "/" . $entry);
+          }
+        }
+      }
+      closedir($handle);
+    }
+    return $result;
+  }
+
   function exportLog() {
     $this->logger->log("Exporting complete log to JSON...");
 
