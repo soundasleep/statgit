@@ -135,6 +135,9 @@ class Runner {
     if (!isset($this->database["phpstats"])) {
       $this->database["phpstats"] = array();
     }
+    if (!isset($this->database["diffs"])) {
+      $this->database["diffs"] = array();
+    }
 
     foreach ($this->database["commits"] as $commit) {
       if (!isset($this->database['stats'][$commit['hash']])) {
@@ -198,6 +201,25 @@ class Runner {
           $this->saveLocalDatabase();
 
         }
+      }
+
+      if (!isset($this->database['diffs'][$commit['hash']])) {
+        $this->checkOut($commit['hash']);
+
+        // generate a patch file
+        $temp = $this->getTempFile();
+        $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git show --numstat > " . escapeshellarg($temp));
+
+        // find diff stats
+        $diffstats = new DiffStatsFinder($this->logger);
+        $stats = $diffstats->compile($temp);
+
+        $this->database['diffs'][$commit['hash']] = $stats;
+        $this->logger->log(number_format(count($stats)) . " files changed");
+
+        // store database
+        $this->saveLocalDatabase();
+
       }
 
     }
