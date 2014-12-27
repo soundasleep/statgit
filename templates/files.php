@@ -33,6 +33,12 @@ $this->renderLineChart($rows, "chart_files", "Files", 800, 600);
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if ($this->getTotalFiles($database['stats'][$commit['hash']]) === 0) {
+    // prevent div/0
+    continue;
+  }
+
   $value = $this->getTotalLoc($database['stats'][$commit['hash']]) / $this->getTotalFiles($database['stats'][$commit['hash']]);
   $rows[date('Y-m-d', strtotime($date))] = array($date, sprintf("%04.2f", $value));
 }
