@@ -75,3 +75,34 @@ foreach ($sorted as $filename => $file) {
 ?>
   </tbody>
 </table>
+
+<h2>Existing Files with Most Revisions</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>File</th><th>Revisions</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+$sorted = array_filter($stats["file_revisions"], function ($a) {
+  return $a["exists"];
+});
+uasort($sorted, function ($a, $b) {
+  if ($a["revisions"] == $b["revisions"]) {
+    return 0;
+  }
+  return $a["revisions"] > $b["revisions"] ? -1 : 1;
+});
+$sorted = array_splice($sorted, 0, 20);
+
+foreach ($sorted as $filename => $file) {
+  echo "<tr>";
+  echo "<th class=\"filename\"><span class=\"file" . ($file['exists'] ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
+  echo "<td>" . number_format($file['revisions']) . "</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>
