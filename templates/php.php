@@ -156,6 +156,10 @@ $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
 
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
   $functions = $database['phpstats'][$commit['hash']]['functions'] + $database['phpstats'][$commit['hash']]['class_methods'];
 
   if ($functions == 0) {
