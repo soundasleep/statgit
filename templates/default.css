@@ -90,3 +90,14 @@ table.statistics thead th:first-of-type,
 table.statistics tfoot th:first-of-type {
   border-right: 1px solid #ccc;
 }
+
+table.statistics th.filename {
+  text-align: left;
+}
+
+table.statistics th.filename .deleted {
+  text-decoration: line-through;
+  font-weight: normal;
+  font-style: italic;
+  color: #666;
+}

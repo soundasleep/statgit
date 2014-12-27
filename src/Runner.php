@@ -44,19 +44,19 @@ class Runner {
   // get a list of all files that exist
   function updateFiles() {
     $this->logger->log("Finding files...");
-    $this->database["files"] = $this->findAllFiles($this->options["root"]);
+    $this->database["files"] = $this->findAllFiles($this->options["root"], $this->options["root"]);
     $this->logger->log("Found " . number_format(count($this->database["files"])) . " files");
   }
 
-  function findAllFiles($dir) {
+  function findAllFiles($dir, $root) {
     $result = array();
     if ($handle = opendir($dir)) {
       while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != ".." && $entry != ".git") {
           if (is_dir($dir . "/" . $entry)) {
-            $result = array_merge($result, $this->findAllFiles($dir . "/" . $entry));
+            $result = array_merge($result, $this->findAllFiles($dir . "/" . $entry, $root));
           } else {
-            $result[$dir . "/" . $entry] = filesize($dir . "/" . $entry);
+            $result[str_replace($root . "/", "", $dir . "/" . $entry)] = filesize($dir . "/" . $entry);
           }
         }
       }
@@ -257,6 +257,7 @@ class Runner {
     $stats['summary'] = new SummaryStats($this->database);
     $stats['loc'] = new LinesOfCodeStats($this->database);
     $stats['tagcloud'] = new TagCloudStats($this->database);
+    $stats['file_revisions'] = new FileRevisionsStats($this->database);
 
     foreach ($stats as $key => $summary) {
       $this->logger->log("Compiling '$key' statistics...");

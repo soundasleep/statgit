@@ -40,3 +40,32 @@ foreach ($database['commits'] as $commit) {
 $this->renderLineChart($rows, "chart_average", "LOC/File", 800, 600);
 
 ?>
+
+<h2>Files with Most Revisions</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>File</th><th>Revisions</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+$sorted = $stats["file_revisions"];
+uasort($sorted, function ($a, $b) {
+  if ($a["revisions"] == $b["revisions"]) {
+    return 0;
+  }
+  return $a["revisions"] > $b["revisions"] ? -1 : 1;
+});
+$sorted = array_splice($sorted, 0, 20);
+
+foreach ($sorted as $filename => $file) {
+  echo "<tr>";
+  echo "<th class=\"filename\"><span class=\"file" . ($file['exists'] ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
+  echo "<td>" . number_format($file['revisions']) . "</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>

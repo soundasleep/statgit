@@ -37,8 +37,8 @@ class HtmlGenerator {
   }
 
   function generateFile($template) {
-    $file = $this->output . $template . ".html";
-    $this->logger->log("Generating '$file'...");
+    $_file = $this->output . $template . ".html";
+    $this->logger->log("Generating '$_file'...");
 
     switch ($template) {
       case "index":
@@ -72,7 +72,7 @@ class HtmlGenerator {
     $contents = ob_get_contents();
     ob_end_clean();
 
-    file_put_contents($file, $contents);
+    file_put_contents($_file, $contents);
 
   }
 
