@@ -43,6 +43,12 @@ $height = 300;
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
   $value = $database['phpstats'][$commit['hash']]['statements'];
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
@@ -58,9 +64,11 @@ $this->renderLineChart($rows, "chart_statements", "Statements", $width, $height)
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
   if (!isset($database['stats'][$commit['hash']]['PHP']) || $database['stats'][$commit['hash']]['PHP']['files'] == 0) {
     continue;
   }
+
   $value = sprintf("%0.1f", $database['phpstats'][$commit['hash']]['statements'] / $database['stats'][$commit['hash']]['PHP']['files']);
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
@@ -76,6 +84,12 @@ $this->renderLineChart($rows, "chart_statements_file", "Statements per File", $w
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
   $value = $database['phpstats'][$commit['hash']]['classes'];
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
@@ -91,6 +105,12 @@ $this->renderLineChart($rows, "chart_classes", "Classes", $width, $height);
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
   if ($database['phpstats'][$commit['hash']]['classes'] == 0) {
     continue;
   }
@@ -110,6 +130,12 @@ $always_zero = true;
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
   $value = $database['phpstats'][$commit['hash']]['includes'];
   if ($value) {
     $always_zero = false;
@@ -133,6 +159,12 @@ $always_zero = true;
 $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
+
+  if (!isset($database['phpstats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
   $value = $database['phpstats'][$commit['hash']]['inline_html'];
   if ($value) {
     $always_zero = false;
