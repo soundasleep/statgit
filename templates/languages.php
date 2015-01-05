@@ -100,3 +100,37 @@ foreach ($database['commits'] as $commit) {
 $this->renderStackedAreaChart($rows, $languages, "chart_history", "Lines of Code", 800, 600);
 
 ?>
+
+<h2>Comments</h2>
+
+<?php
+
+$rows = array();
+foreach ($database['stats'] as $hash => $stats) {
+  $commit = false;
+  foreach ($database['commits'] as $c) {
+    if ($c['hash'] === $hash) {
+      $commit = $c;
+      break;
+    }
+  }
+  if (!$commit) {
+    continue;
+  }
+
+  $date = $commit['author_date'];
+  $lines = 0;
+  $comments = 0;
+  foreach ($stats as $language => $value) {
+    $lines += $value['code'] + $value['comment'] + $value['blank'];
+    $comments += $value['comment'];
+  }
+  if ($lines == 0) {
+    continue;
+  }
+  $rows[date('Y-m-d', strtotime($date))] = array($date, sprintf("%0.2f", 100 * ($comments / $lines)));
+}
+
+$this->renderLineChart($rows, "chart_comments", "Comments %");
+
+?>
