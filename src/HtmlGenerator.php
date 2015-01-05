@@ -31,6 +31,7 @@ class HtmlGenerator {
     $this->generateFile("files");
     $this->generateFile("languages");
     $this->generateFile("php");
+    $this->generateFile("developers");
 
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
@@ -55,6 +56,9 @@ class HtmlGenerator {
         break;
       case "php":
         $title = "Statgit - PHP Statistics";
+        break;
+      case "developers":
+        $title = "Statgit - Developer Statistics";
         break;
       default:
         $title = "Statgit";
@@ -121,5 +125,8 @@ class HtmlGenerator {
     require(__DIR__ . "/../templates/_stacked_chart.php");
   }
 
+  function renderScatterChart($rows, $heading, $id, $title, $width = 600, $height = 400) {
+    require(__DIR__ . "/../templates/_scatter_chart.php");
+  }
 
 }

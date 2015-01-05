@@ -22,7 +22,7 @@
 </dl>
 
 <ul class="navigation">
-  <li>Developers (coming soon)</li>
+  <li><a href="developers.html">Developers</a></li>
   <li><a href="loc.html">Lines of code</a></li>
   <li><a href="languages.html">Language statistics</a></li>
   <li><a href="files.html">File statistics</a></li>
