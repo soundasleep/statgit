@@ -209,7 +209,7 @@ class Runner {
 
       }
 
-      // if there were any PHP files
+      // if there were any PHP files, calculate PHP statistics
       if (isset($this->database['stats'][$commit['hash']]['PHP'])) {
         if (!isset($this->database['phpstats'][$commit['hash']])) {
           $this->checkOut($commit['hash']);
@@ -227,6 +227,7 @@ class Runner {
         }
       }
 
+      // calculate diff statistics
       if (!isset($this->database['diffs'][$commit['hash']])) {
         $this->checkOut($commit['hash']);
 
@@ -244,6 +245,19 @@ class Runner {
         // store database
         $this->saveLocalDatabase();
 
+      }
+
+      // calculate composer statistics
+      if (!isset($this->database['composer'][$commit['hash']])) {
+        $this->checkOut($commit['hash']);
+
+        // find composer stats
+        $phpstats = new ComposerStatsFinder($this->options["root"], $this->logger);
+        $this->logger->log("Generating Composer statistics...");
+        $this->database['composer'][$commit['hash']] = $phpstats->compile();
+
+        // store database
+        $this->saveLocalDatabase();
       }
 
     }

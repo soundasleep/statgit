@@ -37,6 +37,10 @@ class SummaryStats extends StatisticsGenerator {
     $data['language_top'] = $top['language'];
     $data['language_top_loc'] = $top['code'];
 
+    if (isset($this->database['composer'][$data['last_hash']])) {
+      $data['composer'] = $this->database['composer'][$data['last_hash']];
+    }
+
     return $data;
   }
 

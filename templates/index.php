@@ -29,6 +29,9 @@
   <?php if ($database['phpstats']) { ?>
     <li><a href="php.html">PHP statistics</a></li>
   <?php } ?>
+  <?php if ($stats['summary']['composer']) { ?>
+    <li><a href="composer.html">Composer statistics</a></li>
+  <?php } ?>
   <li>Churn (coming soon)</li>
 </ul>
 
