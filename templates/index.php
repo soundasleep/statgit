@@ -32,7 +32,7 @@
   <?php if ($stats['summary']['composer']) { ?>
     <li><a href="composer.html">Composer statistics</a></li>
   <?php } ?>
-  <li>Churn (coming soon)</li>
+  <li><a href="churn.html">Churn</a></li>
 </ul>
 
 <h2>Lines of Code</h2>

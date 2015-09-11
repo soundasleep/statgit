@@ -41,7 +41,39 @@ class SummaryStats extends StatisticsGenerator {
       $data['composer'] = $this->database['composer'][$data['last_hash']];
     }
 
+    $data['days'] = array();
+    for ($day = strtotime($data['first_commit']); $day <= strtotime($data['last_commit']); $day += (60 * 60 * 24)) {
+      $data['days'][date('Y-m-d', $day)] = $this->getDaySummary($day);
+    }
+
     return $data;
+  }
+
+  function getDaySummary($day) {
+    $result = array(
+      "changes" => 0,
+      "added" => 0,
+      "removed" => 0,
+    );
+
+    $formatted = date("Y-m-d", $day);
+
+    foreach ($this->database['commits'] as $commit) {
+      if (!isset($commit['author_date_ymd'])) {
+        $commit['author_date_ymd'] = date("Y-m-d", strtotime($commit['author_date']));
+      }
+
+      if ($formatted == $commit['author_date_ymd']) {
+        foreach ($this->database['diffs'][$commit['hash']] as $diff) {
+          $result['changes'] += $diff['added'];
+          $result['changes'] += $diff['removed'];
+          $result['added'] += $diff['added'];
+          $result['removed'] += $diff['removed'];
+        }
+      }
+    }
+
+    return $result;
   }
 
   function getDevelopers() {

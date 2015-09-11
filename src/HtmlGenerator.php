@@ -33,6 +33,7 @@ class HtmlGenerator {
     $this->generateFile("php");
     $this->generateFile("developers");
     $this->generateFile("composer");
+    $this->generateFile("churn");
 
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
@@ -63,6 +64,9 @@ class HtmlGenerator {
         break;
       case "composer":
         $title = "Statgit - Composer Statistics";
+        break;
+      case "churn":
+        $title = "Statgit - Churn Statistics";
         break;
       default:
         $title = "Statgit";
@@ -119,6 +123,10 @@ class HtmlGenerator {
 
   function renderLineChart($rows, $id, $title, $width = 600, $height = 400) {
     require(__DIR__ . "/../templates/_line_chart.php");
+  }
+
+  function renderBarChart($rows, $id, $heading, $width = 600, $height = 400) {
+    require(__DIR__ . "/../templates/_bar_chart.php");
   }
 
   function renderPieChart($rows, $id, $title, $width = 400, $height = 300) {
