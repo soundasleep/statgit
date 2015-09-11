@@ -24,6 +24,7 @@ $options = array(
   "database" => "database.json",
   "skip_git" => false,
   "debug" => false,
+  "last" => -1,
 );
 
 // overwrite options as necessary
@@ -47,6 +48,11 @@ for ($i = 2; $i < count($argv); $i++) {
       $options['debug'] = true;
       continue;
 
+    case "--last":
+      $options['last'] = $argv[$i+1];
+      $i++;
+      continue;
+
     default:
       throw new Exception("Unknown argument '" . $argv[$i] . "'");
   }
@@ -67,6 +73,7 @@ if (!$options['skip_git']) {
   $statgit->updateFiles();
   $statgit->exportLog();
   $statgit->exportRemotes();
+  $statgit->trimCommits();
   $statgit->iterateOverEachCommit();
 }
 $statgit->compileStats();

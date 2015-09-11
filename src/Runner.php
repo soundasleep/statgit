@@ -7,6 +7,10 @@ class Runner {
   function __construct($options, Logger $logger) {
     $this->options = $options;
     $this->logger = $logger;
+
+    if (!ini_get('date.timezone')) {
+      date_default_timezone_set("UTC");
+    }
   }
 
   function passthru($cmd) {
@@ -150,6 +154,13 @@ class Runner {
   function checkOut($hash) {
     $this->logger->log("Checking out commit '" . $hash . "'...");
     $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout " . escapeshellarg($hash));
+  }
+
+  function trimCommits() {
+    if ($this->options['last'] > 0) {
+      $this->logger->log("Selecting last " . $this->options['last'] . " commits...");
+      $this->database["commits"] = array_slice($this->database["commits"], -$this->options["last"]);
+    }
   }
 
   function iterateOverEachCommit() {

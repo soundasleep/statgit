@@ -32,6 +32,14 @@ resumed later. This also makes it much faster on subsequent startups.
 _statgit_ handles force pushes as well; it only considers the commits referenced in the latest `git log`
 when generating statistics.
 
+## Command line options
+
+* `--output [dir]`
+* `--database [file.json]`
+* `--last [n]` - only parse last _n_ commits
+* `--skip_git`
+* `--debug`
+
 ## Examples
 
 * [Openclerk](http://openclerk.org/statgit/)
