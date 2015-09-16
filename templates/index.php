@@ -4,11 +4,21 @@
   <dt>Generated</dt>
   <dd><?php echo date('r'); ?></dd>
 
+  <dt>Commits</dt>
+  <dd><?php echo number_format(count($database['commits'])); ?></dd>
+
   <dt>Latest commit</dt>
-  <dd><?php echo $this->linkCommit($stats['summary']['last_hash']); ?></dd>
+  <dd>
+    <?php echo $this->linkCommit($stats['summary']['last_hash']); ?>
+    <br>
+    <i><?php echo htmlspecialchars($stats['summary']['last_subject']); ?></i>
+  </dd>
 
   <dt>Report period</dt>
-  <dd><?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?> to <?php echo date('Y-m-d', strtotime($stats['summary']['last_commit'])); ?></dd>
+  <dd>
+    <?php echo date('Y-m-d', strtotime($stats['summary']['first_commit'])); ?> to <?php echo date('Y-m-d', strtotime($stats['summary']['last_commit'])); ?>
+    (<?php echo $this->plural((strtotime($stats['summary']['last_commit']) - strtotime($stats['summary']['first_commit'])) / (60 * 60 * 24), "day"); ?>)
+  </dd>
 
   <dt>Total files</dt>
   <dd><?php echo number_format($stats['summary']['total_files']); ?></dd>

@@ -141,4 +141,16 @@ class HtmlGenerator {
     require(__DIR__ . "/../templates/_scatter_chart.php");
   }
 
+  function plural($n, $one, $many = false) {
+    if ($many === false) {
+      $many = $one . "s";
+    }
+    $n = (int) $n;
+    if ($n == 1) {
+      return number_format($n) . " " . $one;
+    } else {
+      return number_format($n) . " " . $many;
+    }
+  }
+
 }

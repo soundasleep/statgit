@@ -23,6 +23,8 @@ class SummaryStats extends StatisticsGenerator {
     $data['last_commit'] = $firstlast['last']['author_date'];
     $data['first_hash'] = $firstlast['first']['hash'];
     $data['last_hash'] = $firstlast['last']['hash'];
+    $data['first_subject'] = $firstlast['first']['subject'];
+    $data['last_subject'] = $firstlast['last']['subject'];
 
     $data['remote'] = $this->getRemote();
     $data['name'] = $this->getName();
