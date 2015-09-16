@@ -172,4 +172,10 @@ class HtmlGenerator {
     }
   }
 
+  function generateMinMaxClass($min, $max, $value) {
+    $pct = ($value - $min) / ($max - $min);
+
+    return "tag" . sprintf("%01d", $pct * 10) . "0";
+  }
+
 }

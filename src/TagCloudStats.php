@@ -3,7 +3,8 @@
 namespace Statgit;
 
 /**
- * Get the X most used words in commit messages
+ * Get the X most used words in commit messages.
+ * Also X most used words per author.
  */
 class TagCloudStats extends StatisticsGenerator {
 
@@ -14,28 +15,40 @@ class TagCloudStats extends StatisticsGenerator {
   }
 
   function compile() {
+    $result = array();
+    $result['all'] = $this->compileForAuthor(false);
+
+    foreach ($this->allUniqueAuthors() as $email) {
+      $result[$email] = $this->compileForAuthor($email);
+    }
+
+    return $result;
+  }
+
+  function compileForAuthor($author = false) {
     $data = array();
 
     $allwords = array();
 
     foreach ($this->database['commits'] as $commit) {
-      $words = strtolower($commit['subject'] . " " . $commit['body']);
+      if ($commit['author_email'] == $author || $author === false) {
+        $words = strtolower($commit['subject'] . " " . $commit['body']);
 
-      // remove any 'git-svn-id: ' lines
-      $words = preg_replace("/git-svn-id: .+/", "", $words);
+        // remove any 'git-svn-id: ' lines
+        $words = preg_replace("/git-svn-id: .+/", "", $words);
 
-      $words = trim(preg_replace("/\\s\\s+/i", " ", $words));
+        $words = trim(preg_replace("/\\s\\s+/i", " ", $words));
 
-      $words = preg_split("/[^\\w]+/i", $words);  // TODO do we want to preg_split based on word boundaries instead?
-      foreach ($words as $w) {
-        if (strlen($w) >= 3 /* ignore connecting words */) {
-          if (!isset($allwords[$w])) {
-            $allwords[$w] = array('word' => $w, 'count' => 0);
+        $words = preg_split("/[^\\w]+/i", $words);  // TODO do we want to preg_split based on word boundaries instead?
+        foreach ($words as $w) {
+          if (strlen($w) >= 3 /* ignore connecting words */) {
+            if (!isset($allwords[$w])) {
+              $allwords[$w] = array('word' => $w, 'count' => 0);
+            }
+            $allwords[$w]['count']++;
           }
-          $allwords[$w]['count']++;
         }
       }
-
     }
 
     // sort
@@ -52,6 +65,17 @@ class TagCloudStats extends StatisticsGenerator {
     }
 
     return $data;
+  }
+
+  function allUniqueAuthors() {
+    $result = array();
+    foreach ($this->database['commits'] as $commit) {
+      if (!isset($result[$commit['author_email']])) {
+        $result[$commit['author_email']] = true;
+      }
+    }
+
+    return array_keys($result);
   }
 
 }

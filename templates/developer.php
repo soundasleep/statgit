@@ -46,3 +46,11 @@ foreach ($database['commits'] as $commit) {
 $this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800, 300);
 
 ?>
+
+<h2>Tag Cloud of Words in Commit Log Messages</h2>
+
+<?php
+$tags = $stats['tagcloud'][$author['email']];
+require(__DIR__ . "/_tag_cloud.php");
+?>
+
