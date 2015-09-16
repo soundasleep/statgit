@@ -7,7 +7,7 @@
 
 $rows = array();
 foreach ($stats['summary']['days'] as $date => $data) {
-  $value = $data['changes'];
+  $value = $data['changed'];
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
 

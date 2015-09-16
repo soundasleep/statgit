@@ -53,7 +53,7 @@ class SummaryStats extends StatisticsGenerator {
 
   function getDaySummary($day) {
     $result = array(
-      "changes" => 0,
+      "changed" => 0,
       "added" => 0,
       "removed" => 0,
     );
@@ -66,9 +66,9 @@ class SummaryStats extends StatisticsGenerator {
       }
 
       if ($formatted == $commit['author_date_ymd']) {
-        foreach ($this->database['diffs'][$commit['hash']] as $diff) {
-          $result['changes'] += $diff['added'];
-          $result['changes'] += $diff['removed'];
+        foreach ($this->database['diffs'][$commit['hash']] as $file => $diff) {
+          $result['changed'] += $diff['added'];
+          $result['changed'] += $diff['removed'];
           $result['added'] += $diff['added'];
           $result['removed'] += $diff['removed'];
         }
@@ -88,6 +88,11 @@ class SummaryStats extends StatisticsGenerator {
           'name' => $commit['author_name'],
           'first_commit' => $commit['author_date'],
           'last_commit' => $commit['author_date'],
+          'commits' => 0,
+          'files' => 0,
+          'changed' => 0,
+          'added' => 0,
+          'removed' => 0,
         );
       }
 
@@ -98,6 +103,18 @@ class SummaryStats extends StatisticsGenerator {
       }
       if (strtotime($commit['author_date']) > strtotime($author['last_commit'])) {
         $author['last_commit'] = $commit['author_date'];
+      }
+    }
+
+    foreach ($this->database['commits'] as $commit) {
+      $developers[$commit['author_email']]['commits'] += 1;
+      $developers[$commit['author_email']]['files'] += count($commit);
+
+      foreach ($this->database['diffs'][$commit['hash']] as $file => $diff) {
+        $developers[$commit['author_email']]['changed'] += $diff['added'];
+        $developers[$commit['author_email']]['changed'] += $diff['removed'];
+        $developers[$commit['author_email']]['added'] += $diff['added'];
+        $developers[$commit['author_email']]['removed'] += $diff['removed'];
       }
     }
 
