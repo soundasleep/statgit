@@ -88,6 +88,10 @@ class SummaryStats extends StatisticsGenerator {
           'name' => $commit['author_name'],
           'first_commit' => $commit['author_date'],
           'last_commit' => $commit['author_date'],
+          'first_subject' => $commit['subject'],
+          'last_subject' => $commit['suject'],
+          'first_hash' => $commit['hash'],
+          'last_ash' => $commit['hash'],
           'commits' => 0,
           'files' => array(),
           'changed' => 0,
@@ -100,9 +104,13 @@ class SummaryStats extends StatisticsGenerator {
 
       if (strtotime($commit['author_date']) < strtotime($author['first_commit'])) {
         $author['first_commit'] = $commit['author_date'];
+        $author['first_subject'] = $commit['subject'];
+        $author['first_hash'] = $commit['hash'];
       }
       if (strtotime($commit['author_date']) > strtotime($author['last_commit'])) {
         $author['last_commit'] = $commit['author_date'];
+        $author['last_subject'] = $commit['subject'];
+        $author['last_hash'] = $commit['hash'];
       }
     }
 

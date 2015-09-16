@@ -13,10 +13,18 @@ $author = $argument;
   <dd><?php echo htmlspecialchars($author['name']); ?></dd>
 
   <dt>First commit</dt>
-  <dd><?php echo date('r', strtotime($author['first_commit'])); ?></dd>
+  <dd>
+    <?php echo $this->linkCommit($author['first_hash']); ?>
+    <br>
+    <i><?php echo htmlspecialchars($author['first_subject']); ?></i>
+  </dd>
 
   <dt>Last commit</dt>
-  <dd><?php echo date('r', strtotime($author['last_commit'])); ?></dd>
+  <dd>
+    <?php echo $this->linkCommit($author['last_hash']); ?>
+    <br>
+    <i><?php echo htmlspecialchars($author['last_subject']); ?></i>
+  </dd>
 
   <dt>Commits</dt>
   <dd><?php echo number_format($author['commits']); ?></dd>
@@ -58,7 +66,7 @@ $this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800
 
 foreach ($author['files'] as $file => $commits) {
   echo "<tr>";
-  echo "<th>" . htmlspecialchars($file) . "</th>";
+  echo "<th class=\"filename\">" . htmlspecialchars($file) . "</th>";
   echo "<td>" . number_format($commits) . "</td>";
   echo "</tr>\n";
 }
