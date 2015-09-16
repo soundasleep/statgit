@@ -8,5 +8,9 @@
   },
   "require": {
     "nikic/php-parser": "~1.0.2"
+  },
+  "require-dev": {
+    "soundasleep/component-tests": "dev-master",
+    "phpunit/phpunit": "4.0"
   }
 }
