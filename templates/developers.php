@@ -21,7 +21,7 @@ foreach ($database['commits'] as $commit) {
   $rows[] = array($x, $y);
 }
 
-$this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800, 150);
+$this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800, 300);
 
 ?>
 
@@ -45,7 +45,7 @@ $sorted = array_splice($sorted, 0, 20);
 
 foreach ($sorted as $email => $author) {
   echo "<tr>";
-  echo "<th>" . htmlspecialchars($author['email']) . "</th>";
+  echo "<th>" . $this->linkTo($this->authorLink($author), $author['email']) . "</th>";
   echo "<td>" . number_format($author['commits']) . "</td>";
   echo "<td>" . number_format($author['changed']) . "</td>";
   echo "<td>" . date("Y-m-d", strtotime($author['last_commit'])) . "</td>";

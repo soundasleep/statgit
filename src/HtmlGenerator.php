@@ -35,12 +35,25 @@ class HtmlGenerator {
     $this->generateFile("composer");
     $this->generateFile("churn");
 
+    // generate related files
+    foreach ($this->stats['summary']['authors'] as $email => $author) {
+      $this->generateFile("developer",
+        $this->output . $this->authorLink($author),
+        $author);
+    }
+
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
   }
 
-  function generateFile($template) {
-    $_file = $this->output . $template . ".html";
+  function authorLink($author) {
+    return $this->safe("developer_" . $author['email'] . ".html");
+  }
+
+  function generateFile($template, $_file = false, $argument = array()) {
+    if ($_file === false) {
+      $_file = $this->output . $template . ".html";
+    }
     $this->logger->log("Generating '$_file'...");
 
     switch ($template) {
@@ -61,6 +74,9 @@ class HtmlGenerator {
         break;
       case "developers":
         $title = "Statgit - Developer Statistics";
+        break;
+      case "developer":
+        $title = "Statgit - Developer Statistics - $argument[email]";
         break;
       case "composer":
         $title = "Statgit - Composer Statistics";
@@ -88,10 +104,13 @@ class HtmlGenerator {
 
   }
 
+  function safe($s) {
+    return preg_replace("/[^A-Za-z0-9_\-@]/", "_", $s);
+  }
+
   function isGithub() {
     return isset($this->database['remotes']['origin']) && strpos($this->database['remotes']['origin'], "github.com") !== false;
   }
-
 
   function linkCommit($r) {
     if ($this->isGithub()) {
