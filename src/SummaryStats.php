@@ -89,7 +89,7 @@ class SummaryStats extends StatisticsGenerator {
           'first_commit' => $commit['author_date'],
           'last_commit' => $commit['author_date'],
           'commits' => 0,
-          'files' => 0,
+          'files' => array(),
           'changed' => 0,
           'added' => 0,
           'removed' => 0,
@@ -108,14 +108,24 @@ class SummaryStats extends StatisticsGenerator {
 
     foreach ($this->database['commits'] as $commit) {
       $developers[$commit['author_email']]['commits'] += 1;
-      $developers[$commit['author_email']]['files'] += count($commit);
 
       foreach ($this->database['diffs'][$commit['hash']] as $file => $diff) {
         $developers[$commit['author_email']]['changed'] += $diff['added'];
         $developers[$commit['author_email']]['changed'] += $diff['removed'];
         $developers[$commit['author_email']]['added'] += $diff['added'];
         $developers[$commit['author_email']]['removed'] += $diff['removed'];
+
+        if (!isset($developers[$commit['author_email']]['files'][$file])) {
+          $developers[$commit['author_email']]['files'][$file] = 0;
+        }
+
+        $developers[$commit['author_email']]['files'][$file] += 1;
       }
+    }
+
+    foreach (array_keys($developers) as $email) {
+      arsort($developers[$email]['files']);
+      $developers[$email]['files'] = array_slice($developers[$email]['files'], 0, 20, true /* preserve_keys */);
     }
 
     return $developers;

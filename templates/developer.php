@@ -47,10 +47,29 @@ $this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800
 
 ?>
 
+<h2>Files with Most Revisions</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>File</th><th>Commits</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+foreach ($author['files'] as $file => $commits) {
+  echo "<tr>";
+  echo "<th>" . htmlspecialchars($file) . "</th>";
+  echo "<td>" . number_format($commits) . "</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>
+
 <h2>Tag Cloud of Words in Commit Log Messages</h2>
 
 <?php
 $tags = $stats['tagcloud'][$author['email']];
 require(__DIR__ . "/_tag_cloud.php");
 ?>
-
