@@ -186,4 +186,16 @@ class HtmlGenerator {
     return "tag" . sprintf("%01d", $pct * 10) . "0";
   }
 
+  function getTravisCiBadge($source) {
+    $matches = array();
+    if (preg_match("#https?://github.com/([^/]+)/([^/]+?)(|\\.git)$#i", $source, $matches)) {
+      $url = htmlspecialchars($matches[1]) . "/" . htmlspecialchars($matches[2]);
+      return "<a href=\"https://travis-ci.org/$url\">" .
+        "<img src=\"https://travis-ci.org/$url.svg?branch=master\">" .
+        "</a>";
+    } else {
+      return "";
+    }
+  }
+
 }

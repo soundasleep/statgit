@@ -76,13 +76,7 @@ foreach ($stats['summary']['composer']['lock_packages'] as $package => $info) {
   echo "</th>";
   echo "<td>";
   if (isset($info['source'])) {
-    $matches = array();
-    if (preg_match("#https?://github.com/([^/]+)/([^/]+?)(|\\.git)$#i", $info['source'], $matches)) {
-      $url = htmlspecialchars($matches[1]) . "/" . htmlspecialchars($matches[2]);
-      echo "<a href=\"https://travis-ci.org/$url\">";
-      echo "<img src=\"https://travis-ci.org/$url.svg?branch=master\">";
-      echo "</a>";
-    }
+    echo $this->getTravisCiBadge($info['source']);
   }
   echo "</td>";
   echo "</tr>\n";

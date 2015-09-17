@@ -48,3 +48,44 @@ foreach ($database['commits'] as $commit) {
 $this->renderLineChart($rows, "chart_lock_dependencies", "Dependencies");
 
 ?>
+
+<h2>travis-ci.org status</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>Dependency</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+foreach ($stats['summary']['gemfile']['dependencies'] as $dependency) {
+  $info = false;
+  if (isset($database['rubygems'][$dependency])) {
+    $info = $database['rubygems'][$dependency];
+  }
+
+  $source = false;
+  $source = isset($info['source_code_uri']) ? $info['source_code_uri'] : $source;
+  $source = isset($info['homepage_uri']) ? $info['homepage_uri'] : $source;
+
+  echo "<tr>";
+  echo "<th class=\"package\">";
+  if ($source) {
+    echo "<a href=\"" . htmlspecialchars($source) . "\">";
+  }
+  echo htmlspecialchars($dependency);
+  if ($source) {
+    echo "</a>";
+  }
+  echo "</th>";
+  echo "<td>";
+  if ($source) {
+    echo $this->getTravisCiBadge($source);
+  }
+  echo "</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>

@@ -90,6 +90,7 @@ if (!$options['skip_git']) {
   $statgit->iterateOverEachCommit();
 }
 $statgit->compileStats();
+$statgit->updateRubygems();
 $statgit->generateHTML();
 $statgit->saveLocalDatabase();
 

@@ -308,6 +308,45 @@ class Runner {
 
   }
 
+  function updateRubygems() {
+    if (!isset($this->database["rubygems"])) {
+      $this->database["rubygems"] = array();
+    }
+
+    if (isset($this->stats['summary']['gemfile'])) {
+      $this->logger->log("Updating information from rubygems...");
+
+      foreach ($this->stats['summary']['gemfile']['dependencies'] as $dependency) {
+        if (!isset($this->database["rubygems"][$dependency])) {
+          $rubygem = $this->loadRubygem($dependency);
+          if ($rubygem) {
+            $this->database["rubygems"][$dependency] = $rubygem;
+            $this->saveLocalDatabase();
+          }
+        }
+      }
+
+      $this->logger->log("Found " . number_format(count($this->database["rubygems"])) . " rubygems");
+    }
+  }
+
+  function loadRubygem($rubygem) {
+    if (!preg_match("/[A-Za-z0-9\.\-_]+/", $rubygem)) {
+      // invalid gem name: https://github.com/rubygems/rubygems.org/blob/master/lib/patterns.rb
+      return false;
+    }
+
+    $url = "https://rubygems.org/api/v1/gems/$rubygem.json";
+    $this->logger->log("Requesting '$url'...");
+    $json = json_decode(file_get_contents($url), true /* assoc */);
+    if ($json) {
+      return $json;
+    } else {
+      $this->logger->log("Could not load '$url'");
+      return false;
+    }
+  }
+
   // temporary, only stored for this run
   var $stats = array();
 
