@@ -27,6 +27,8 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
       "its" => 0,
       "lets" => 0,
       "fixtures" => 0,
+      "befores" => 0,
+      "afters" => 0,
     );
 
     // iterate over all files
@@ -84,6 +86,14 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
 
     if (preg_match_all("/\sit\s+(string|{)/", $source, $matches, PREG_SET_ORDER)) {
       $this->stats["its"] += count($matches);
+    }
+
+    if (preg_match_all("/\sbefore\s+($symbol|{)/", $source, $matches, PREG_SET_ORDER)) {
+      $this->stats["befores"] += count($matches);
+    }
+
+    if (preg_match_all("/\safter\s+($symbol|{)/", $source, $matches, PREG_SET_ORDER)) {
+      $this->stats["afters"] += count($matches);
     }
 
     if (preg_match_all("/\slet!?\s*\(/", $source, $matches, PREG_SET_ORDER)) {

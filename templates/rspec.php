@@ -36,6 +36,16 @@ $latest = $database['rspec'][$stats['summary']['last_hash']];
     <dd><?php echo number_format($latest['lets']); ?></dd>
   <?php } ?>
 
+  <?php if ($latest['befores']) { ?>
+    <dt>Befores</dt>
+    <dd><?php echo number_format($latest['befores']); ?></dd>
+  <?php } ?>
+
+  <?php if ($latest['afters']) { ?>
+    <dt>Afters</dt>
+    <dd><?php echo number_format($latest['afters']); ?></dd>
+  <?php } ?>
+
   <?php if ($latest['fixtures']) { ?>
     <dt>Fixtures</dt>
     <dd><?php echo number_format($latest['fixtures']); ?></dd>
