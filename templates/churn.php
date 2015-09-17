@@ -3,6 +3,8 @@
 </div>
 <h1>Churn</h1>
 
+<h2>Lines of Code</h2>
+
 <?php
 
 $rows = array();

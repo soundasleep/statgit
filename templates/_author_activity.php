@@ -61,3 +61,22 @@ foreach ($database['commits'] as $commit) {
 $this->renderHistogramChart($rows, "Commits", "chart_commits_hour", "Commit Activity per Hour", 800, 300);
 
 ?>
+
+<h3>Per Week</h3>
+
+<?php
+
+$rows = array();
+foreach ($database['commits'] as $commit) {
+  if ($commit['author_email'] == $commit_email || $commit_email === false) {
+    $date = $commit['author_date'];
+    $key = date('Y-W', strtotime($date));
+    $rows[$key] += 1;
+  }
+}
+
+ksort($rows);
+
+$this->renderHistogramChart($rows, "Commits", "chart_commits_week", "Commit Activity per Week", 600, 300);
+
+?>

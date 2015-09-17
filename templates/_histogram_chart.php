@@ -27,7 +27,7 @@
       height: <?php echo $height; ?>,
       hAxis: {title: <?php echo json_encode($title); ?>},
       vAxis: {title: <?php echo json_encode($heading); ?>, minValue: 0},
-      chartArea: {width: '80%', height: '70%', left: 50, top: 25}
+      chartArea: {width: '75%', height: '70%', left: 50, top: 25}
     };
 
     // Instantiate and draw our chart, passing in some options.
