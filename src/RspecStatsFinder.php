@@ -25,6 +25,8 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
       "describes" => 0,
       "contexts" => 0,
       "its" => 0,
+      "lets" => 0,
+      "fixtures" => 0,
     );
 
     // iterate over all files
@@ -39,9 +41,12 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
         if (substr($entry, 0, 1) != ".") {
           if (is_dir($dir . "/" . $entry)) {
             $this->iterateOver($dir . "/" . $entry);
-          } else if ($this->isRubyFile($entry)) {
+          } else if ($this->isRubyFile($dir . "/" . $entry)) {
             $code = file_get_contents($dir . "/" . $entry);
             $this->parseRuby($code);
+          } else if ($this->isFixture($dir . "/" . $entry)) {
+            $code = file_get_contents($dir . "/" . $entry);
+            $this->parseFixture($code);
           }
         }
       }
@@ -51,6 +56,11 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
 
   function isRubyFile($filename) {
     return substr(strtolower($filename), -strlen("_spec.rb")) === "_spec.rb";
+  }
+
+  function isFixture($filename) {
+    return substr(strtolower($filename), -strlen(".yml")) === ".yml" &&
+      strpos("fixture", $filename) !== false;
   }
 
   function parseRuby($source) {
@@ -64,7 +74,7 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
     $identifier = "[A-Za-z0-9_]+";
     $symbol = ":[A-Za-z0-9_]+";
 
-    if (preg_match_all("/\sRSpec.describe\s+($identifier|string)/", $source, $matches, PREG_SET_ORDER)) {
+    if (preg_match_all("/\s(|RSpec\.)describe\s+($identifier|string)/", $source, $matches, PREG_SET_ORDER)) {
       $this->stats["describes"] += count($matches);
     }
 
@@ -75,6 +85,14 @@ class RspecStatsFinder extends \PhpParser\NodeVisitorAbstract {
     if (preg_match_all("/\sit\s+(string|{)/", $source, $matches, PREG_SET_ORDER)) {
       $this->stats["its"] += count($matches);
     }
+
+    if (preg_match_all("/\slet!?\s*\(/", $source, $matches, PREG_SET_ORDER)) {
+      $this->stats["lets"] += count($matches);
+    }
+  }
+
+  function parseFixture($source) {
+    $this->stats["fixtures"] += 1;
   }
 
 }
