@@ -89,6 +89,44 @@ $this->renderPieChart($rows, "chart_languages", "Lines of Code");
 
 ?>
 
+<h2>Top Authors</h2>
+
+<?php
+
+$sorted = $stats["summary"]["authors"];
+uasort($sorted, function ($a, $b) {
+  if ($a["commits"] == $b["commits"]) {
+    return 0;
+  }
+  return $a["commits"] > $b["commits"] ? -1 : 1;
+});
+$rows = array();
+foreach ($sorted as $author) {
+  $rows[$author['email']] = $author['commits'];
+}
+
+$this->renderPieChart($rows, "chart_authors_pie_commits", "Commits");
+
+?>
+
+<?php
+
+$sorted = $stats["summary"]["authors"];
+uasort($sorted, function ($a, $b) {
+  if ($a["changed"] == $b["changed"]) {
+    return 0;
+  }
+  return $a["changed"] > $b["changed"] ? -1 : 1;
+});
+$rows = array();
+foreach ($sorted as $author) {
+  $rows[$author['email']] = $author['changed'];
+}
+
+$this->renderPieChart($rows, "chart_authors_pie_changes", "Changes");
+
+?>
+
 <h2>Tag Cloud of Words in Commit Log Messages</h2>
 
 <?php

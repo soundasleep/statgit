@@ -128,3 +128,5 @@ foreach ($database['stats'] as $hash => $stats) {
 $this->renderLineChart($rows, "chart_comments", "Comments %");
 
 ?>
+
+
