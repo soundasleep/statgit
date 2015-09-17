@@ -87,7 +87,7 @@ $rows = array();
 foreach ($database['commits'] as $commit) {
   $date = $commit['author_date'];
 
-  $row = array(date('Y-m-d', strtotime($date)));
+  $row = array(date('Y-m-d H:i:s', strtotime($date)));
   foreach ($languages as $i => $lang) {
     $row[] = 0;
   }

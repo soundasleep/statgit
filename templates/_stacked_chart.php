@@ -39,7 +39,7 @@ uasort($rows, function ($a, $b) {
         $first = false;
         $date = strtotime($row[0]);
         array_shift($row);
-        echo "[new Date(", date('Y', $date), ", ", date('m', $date), "-1, ", date('d', $date) . "), " . implode(", ", $row) . "]";
+        echo "[new Date(", date('Y', $date), ", ", date('m', $date), "-1, ", date('d', $date) . ", " . date("H", $date) . ", " . date("i", $date) . ", " . date("s", $date) . "), " . implode(", ", $row) . "]";
       }
       ?>
     ]);
