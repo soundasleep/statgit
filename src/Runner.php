@@ -8,9 +8,7 @@ class Runner {
     $this->options = $options;
     $this->logger = $logger;
 
-    if (!ini_get('date.timezone')) {
-      date_default_timezone_set("UTC");
-    }
+    date_default_timezone_set($this->options["timezone"]);
   }
 
   function passthru($cmd) {

@@ -25,6 +25,7 @@ $options = array(
   "skip_git" => false,
   "debug" => false,
   "last" => -1,
+  "timezone" => "UTC",
   "force-php-stats" => false,
   "force-ruby-stats" => false,
   "force-diff-stats" => false,
@@ -46,6 +47,11 @@ for ($i = 2; $i < count($argv); $i++) {
 
     case "--database":
       $options['database'] = $argv[$i+1];
+      $i++;
+      continue;
+
+    case "--timezone":
+      $options['timezone'] = $argv[$i+1];
       $i++;
       continue;
 

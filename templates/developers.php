@@ -62,7 +62,7 @@ foreach ($database['commits'] as $commit) {
   $rows[$key] += 1;
 }
 
-$this->renderHistogramChart($rows, "Commits", "chart_commits_hour", "Commit Activity per Hour", 400, 300);
+$this->renderHistogramChart($rows, "Commits", "chart_commits_hour", "Commit Activity per Hour", 800, 300);
 
 ?>
 

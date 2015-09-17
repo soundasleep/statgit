@@ -39,6 +39,7 @@ when generating statistics.
 * `--last [n]` - only parse last _n_ commits
 * `--skip_git`
 * `--debug`
+* `--timezone [s]` - use _s_ as the timezone, defaults to "UTC"
 
 ## Examples
 
