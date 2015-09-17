@@ -31,7 +31,7 @@ uasort($sorted, function ($a, $b) {
   }
   return $a["commits"] > $b["commits"] ? -1 : 1;
 });
-$sorted = array_splice($sorted, 0, 20);
+$sorted = array_splice($sorted, 0, 50);
 
 foreach ($sorted as $email => $author) {
   echo "<tr>";

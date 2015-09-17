@@ -1,3 +1,13 @@
+<?php
+/* we should sort all rows before printing out any rows */
+uasort($rows, function ($a, $b) {
+  if ($a[0] == $b[0]) {
+    return 0;
+  }
+  return $a[0] > $b[0] ? -1 : 1;
+});
+?>
+
 <div id="<?php echo $id; ?>" style="width: <?php echo $width; ?>px; height: <?php echo $height; ?>px;"></div>
 
 <script type="text/javascript">
