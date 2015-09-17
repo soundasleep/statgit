@@ -51,7 +51,7 @@ $this->renderLineChart($rows, "chart_average", "LOC/File", 800, 600);
 
 <table class="statistics">
   <thead>
-    <tr><th>File</th><th>Revisions</th></tr>
+    <tr><th>File</th><th>Revisions</th><th>Size</th></tr>
   </thead>
   <tbody>
 <?php
@@ -66,9 +66,12 @@ uasort($sorted, function ($a, $b) {
 $sorted = array_splice($sorted, 0, 20);
 
 foreach ($sorted as $filename => $file) {
+  $size = isset($database["files"][$filename]) ? $database["files"][$filename] : 0;
+
   echo "<tr>";
   echo "<th class=\"filename\"><span class=\"file" . ($file['exists'] ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
-  echo "<td>" . number_format($file['revisions']) . "</td>";
+  echo "<td class=\"number\">" . number_format($file['revisions']) . "</td>";
+  echo "<td class=\"number\">" . number_format($size / 1024, 2) . " KB</td>";
   echo "</tr>\n";
 }
 
@@ -80,7 +83,7 @@ foreach ($sorted as $filename => $file) {
 
 <table class="statistics">
   <thead>
-    <tr><th>File</th><th>Revisions</th></tr>
+    <tr><th>File</th><th>Revisions</th><th>Size</th></tr>
   </thead>
   <tbody>
 <?php
@@ -97,9 +100,39 @@ uasort($sorted, function ($a, $b) {
 $sorted = array_splice($sorted, 0, 20);
 
 foreach ($sorted as $filename => $file) {
+  $size = isset($database["files"][$filename]) ? $database["files"][$filename] : 0;
+
   echo "<tr>";
   echo "<th class=\"filename\"><span class=\"file" . ($file['exists'] ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
-  echo "<td>" . number_format($file['revisions']) . "</td>";
+  echo "<td class=\"number\">" . number_format($file['revisions']) . "</td>";
+  echo "<td class=\"number\">" . number_format($size / 1024, 2) . " KB</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>
+
+<h2>Largest files</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>File</th><th>Size</th><th>Revisions</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+$sorted = $database["files"];
+arsort($sorted);
+$sorted = array_splice($sorted, 0, 20);
+
+foreach ($sorted as $filename => $size) {
+  $file = $stats["file_revisions"][$filename];
+
+  echo "<tr>";
+  echo "<th class=\"filename\"><span class=\"file" . ($file['exists'] ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
+  echo "<td class=\"number\">" . number_format($size / 1024, 2) . " KB</td>";
+  echo "<td class=\"number\">" . number_format($file["revisions"]) . "</td>";
   echo "</tr>\n";
 }
 

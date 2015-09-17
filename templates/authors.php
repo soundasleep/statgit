@@ -36,9 +36,9 @@ $sorted = array_splice($sorted, 0, 50);
 foreach ($sorted as $email => $author) {
   echo "<tr>";
   echo "<th>" . $this->linkTo($this->authorLink($author), $author['email']) . "</th>";
-  echo "<td>" . number_format($author['commits']) . "</td>";
-  echo "<td>" . number_format($author['changed']) . "</td>";
-  echo "<td>" . date("Y-m-d", strtotime($author['last_commit'])) . "</td>";
+  echo "<td class=\"number\">" . number_format($author['commits']) . "</td>";
+  echo "<td class=\"number\">" . number_format($author['changed']) . "</td>";
+  echo "<td class=\"date\">" . date("Y-m-d", strtotime($author['last_commit'])) . "</td>";
   echo "</tr>\n";
 }
 

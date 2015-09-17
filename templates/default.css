@@ -65,10 +65,12 @@ ul.tag_cloud li {
 table.statistics {
   border: 1px solid #ccc;
   border-collapse: collapse;
+  min-width: 50%;
 }
 
 table.statistics th, table.statistics td {
   padding: 4px 6px;
+  min-width: 75px;
 }
 
 table.statistics thead {
@@ -91,13 +93,25 @@ table.statistics tfoot th:first-of-type {
   border-right: 1px solid #ccc;
 }
 
-table.statistics th.filename {
+table.statistics th.filename,
+table.statistics td.filename {
   text-align: left;
 }
 
-table.statistics th.filename .deleted {
+table.statistics th.filename .deleted,
+table.statistics td.filename .deleted {
   text-decoration: line-through;
   font-weight: normal;
   font-style: italic;
   color: #666;
+}
+
+table.statistics th.number,
+table.statistics td.number {
+  text-align: right;
+}
+
+table.statistics th.date,
+table.statistics td.date {
+  text-align: right;
 }
