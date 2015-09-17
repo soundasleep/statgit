@@ -20,11 +20,8 @@ $height = 300;
   <dt>Defs</dt>
   <dd><?php echo number_format($database['rubystats'][$stats['summary']['last_hash']]['defs']); ?></dd>
 
-  <dt>Modules</dt>
-  <dd><?php echo number_format($database['rubystats'][$stats['summary']['last_hash']]['modules']); ?></dd>
-
-  <dt>Includes</dt>
-  <dd><?php echo number_format($database['rubystats'][$stats['summary']['last_hash']]['includes']); ?></dd>
+  <dt>Requires</dt>
+  <dd><?php echo number_format($database['rubystats'][$stats['summary']['last_hash']]['requires']); ?></dd>
 
   <dt>Validates</dt>
   <dd><?php echo number_format($database['rubystats'][$stats['summary']['last_hash']]['validates']); ?></dd>
@@ -147,6 +144,35 @@ if ($always_zero) {
   echo "(none)";
 } else {
   $this->renderLineChart($rows, "chart_includes", "Includes", $width, $height);
+}
+
+?>
+
+<h2>Requires</h2>
+
+<?php
+
+$always_zero = true;
+$rows = array();
+foreach ($database['commits'] as $commit) {
+  $date = $commit['author_date'];
+
+  if (!isset($database['rubystats'][$commit['hash']])) {
+    // ignore PHP parse errors
+    continue;
+  }
+
+  $value = $database['rubystats'][$commit['hash']]['requires'];
+  if ($value) {
+    $always_zero = false;
+  }
+  $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
+}
+
+if ($always_zero) {
+  echo "(none)";
+} else {
+  $this->renderLineChart($rows, "chart_requires", "Requires", $width, $height);
 }
 
 ?>

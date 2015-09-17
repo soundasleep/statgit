@@ -26,6 +26,7 @@ class RubyStatsFinder extends \PhpParser\NodeVisitorAbstract {
       "defs" => 0,
       "modules" => 0,
       "includes" => 0,
+      "requires" => 0,
       "helpers" => 0,
       "filters" => 0,
       "comments" => 0,
@@ -66,8 +67,8 @@ class RubyStatsFinder extends \PhpParser\NodeVisitorAbstract {
     $source = "\n" . $source . "\n";
 
     // try in a horrible way to remove all strings
-    $source = preg_replace("/\"[^\"]+?\"/", "[string]", $source);
-    $source = preg_replace("/'[^'']+?'/", "[string]", $source);
+    $source = preg_replace("/\"[^\"]+?\"/", "string", $source);
+    $source = preg_replace("/'[^'']+?'/", "string", $source);
 
     // now do horrible regular expressions
     $identifier = "[A-Za-z0-9_]+";
@@ -87,6 +88,10 @@ class RubyStatsFinder extends \PhpParser\NodeVisitorAbstract {
 
     if (preg_match_all("/\sinclude\s+$identifier/", $source, $matches, PREG_SET_ORDER)) {
       $this->stats["includes"] += count($matches);
+    }
+
+    if (preg_match_all("/\srequire\s+string/", $source, $matches, PREG_SET_ORDER)) {
+      $this->stats["requires"] += count($matches);
     }
 
     if (preg_match_all("/\shelper\s+($identifier|$symbol)/", $source, $matches, PREG_SET_ORDER)) {
