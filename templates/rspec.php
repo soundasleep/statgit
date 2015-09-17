@@ -97,3 +97,55 @@ foreach ($database['commits'] as $commit) {
 $this->renderLineChart($rows, "chart_its_per_describe", "Its", $width, $height);
 
 ?>
+
+<h2>Lines of Code per Describe</h2>
+
+<?php
+
+$rows = array();
+foreach ($database['commits'] as $commit) {
+  $date = $commit['author_date'];
+
+  if (!isset($database['rspec'][$commit['hash']])) {
+    // ignore Ruby parse errors
+    continue;
+  }
+  $describes = $database['rspec'][$commit['hash']]['describes'];
+
+  if ($describes == 0) {
+    continue;
+  }
+
+  $value = sprintf("%0.2f", $database['stats'][$commit['hash']]['Ruby']['code'] / $describes);
+  $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
+}
+
+$this->renderLineChart($rows, "chart_loc_describes", "LOC", $width, $height);
+
+?>
+
+<h2>Lines of Code per It</h2>
+
+<?php
+
+$rows = array();
+foreach ($database['commits'] as $commit) {
+  $date = $commit['author_date'];
+
+  if (!isset($database['rspec'][$commit['hash']])) {
+    // ignore Ruby parse errors
+    continue;
+  }
+  $its = $database['rspec'][$commit['hash']]['its'];
+
+  if ($its == 0) {
+    continue;
+  }
+
+  $value = sprintf("%0.2f", $database['stats'][$commit['hash']]['Ruby']['code'] / $its);
+  $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
+}
+
+$this->renderLineChart($rows, "chart_loc_its", "LOC", $width, $height);
+
+?>

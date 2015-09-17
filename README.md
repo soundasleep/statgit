@@ -41,6 +41,11 @@ when generating statistics.
 * `--debug`
 * `--timezone [s]` - use _s_ as the timezone, defaults to "UTC"
 
+## Ideas
+
+* For large code bases: use `--last` to restrict the number of commits.
+* For generating specs of just your specs, for example: use `<project>/spec` instead of `<project>`
+
 ## Examples
 
 * [Openclerk](http://openclerk.org/statgit/)

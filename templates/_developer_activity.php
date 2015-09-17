@@ -7,7 +7,7 @@ foreach ($database['commits'] as $commit) {
   if ($commit['author_email'] == $commit_email || $commit_email === false) {
     $date = $commit['author_date'];
     $x = date('Y-m-d', strtotime($date));
-    $y = sprintf("%0.2f", date('H', strtotime($date)) + (date('m', strtotime($date)) * (1/60)));
+    $y = sprintf("%0.2f", date('H', strtotime($date)) + (date('i', strtotime($date)) * (1/60)));
 
     $rows[] = array($x, $y);
   }
