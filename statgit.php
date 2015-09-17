@@ -27,6 +27,9 @@ $options = array(
   "last" => -1,
   "force-php-stats" => false,
   "force-ruby-stats" => false,
+  "force-diff-stats" => false,
+  "force-composer-stats" => false,
+  "force-gemfile-stats" => false,
 );
 
 // overwrite options as necessary
@@ -51,11 +54,11 @@ for ($i = 2; $i < count($argv); $i++) {
       continue;
 
     case "--force-php-stats":
-      $options['force-php-stats'] = true;
-      continue;
-
     case "--force-ruby-stats":
-      $options['force-ruby-stats'] = true;
+    case "--force-diff-stats":
+    case "--force-composer-stats":
+    case "--force-gemfile-stats":
+      $options[substr($argv[$i], 2)] = true;
       continue;
 
     case "--last":

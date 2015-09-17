@@ -42,6 +42,9 @@ class SummaryStats extends StatisticsGenerator {
     if (isset($this->database['composer'][$data['last_hash']])) {
       $data['composer'] = $this->database['composer'][$data['last_hash']];
     }
+    if (isset($this->database['gemfile'][$data['last_hash']])) {
+      $data['gemfile'] = $this->database['gemfile'][$data['last_hash']];
+    }
 
     $data['days'] = array();
     for ($day = strtotime($data['first_commit']); $day <= strtotime($data['last_commit']); $day += (60 * 60 * 24)) {

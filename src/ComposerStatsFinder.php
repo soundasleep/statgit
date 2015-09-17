@@ -4,6 +4,7 @@ namespace Statgit;
 
 /**
  * Generate some basic composer.json and composer.lock stats
+ * for a single snapshot in history
  */
 class ComposerStatsFinder extends \PhpParser\NodeVisitorAbstract {
 

@@ -257,7 +257,7 @@ class Runner {
       }
 
       // calculate diff statistics
-      if (!isset($this->database['diffs'][$commit['hash']])) {
+      if (!isset($this->database['diffs'][$commit['hash']]) || $this->options["force-diff-stats"]) {
         $this->checkOut($commit['hash']);
 
         // generate a patch file
@@ -277,13 +277,28 @@ class Runner {
       }
 
       // calculate composer statistics
-      if (!isset($this->database['composer'][$commit['hash']])) {
+      if (!isset($this->database['composer'][$commit['hash']]) || $this->options["force-composer-stats"]) {
         $this->checkOut($commit['hash']);
 
         // find composer stats
-        $phpstats = new ComposerStatsFinder($this->options["root"], $this->logger);
+        $composerstats = new ComposerStatsFinder($this->options["root"], $this->logger);
         $this->logger->log("Generating Composer statistics...");
-        $this->database['composer'][$commit['hash']] = $phpstats->compile();
+        $this->database['composer'][$commit['hash']] = $composerstats->compile();
+
+        // store database
+        $this->saveLocalDatabase();
+      }
+
+      // calculate gemfile statistics
+      if (!isset($this->database['gemfile'][$commit['hash']]) || $this->options["force-gemfile-stats"]) {
+        $this->checkOut($commit['hash']);
+
+        // find gemfile stats
+        $gemfilestats = new GemfileStatsFinder($this->options["root"], $this->logger);
+        $this->logger->log("Generating Gemfile statistics...");
+        $this->database['gemfile'][$commit['hash']] = $gemfilestats->compile();
+
+        $this->logger->log("Found " . number_format($this->database['gemfile'][$commit['hash']]['specs']) . " specs");
 
         // store database
         $this->saveLocalDatabase();

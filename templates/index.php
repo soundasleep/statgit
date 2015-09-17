@@ -45,6 +45,9 @@
   <?php if ($stats['summary']['composer']) { ?>
     <li><a href="composer.html">Composer statistics</a></li>
   <?php } ?>
+  <?php if ($stats['summary']['gemfile']) { ?>
+    <li><a href="gemfile.html">Gemfile statistics</a></li>
+  <?php } ?>
   <li><a href="churn.html">Churn</a></li>
 </ul>
 

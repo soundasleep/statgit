@@ -34,6 +34,7 @@ class HtmlGenerator {
     $this->generateFile("ruby");
     $this->generateFile("developers");
     $this->generateFile("composer");
+    $this->generateFile("gemfile");
     $this->generateFile("churn");
 
     // generate related files
@@ -84,6 +85,9 @@ class HtmlGenerator {
         break;
       case "composer":
         $title = "Statgit - Composer Statistics";
+        break;
+      case "gemfile":
+        $title = "Statgit - Gemfile Statistics";
         break;
       case "churn":
         $title = "Statgit - Churn Statistics";
