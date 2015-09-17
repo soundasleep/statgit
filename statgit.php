@@ -34,6 +34,7 @@ $options = array(
   "force-composer-stats" => false,
   "force-gemfile-stats" => false,
   "rake-args" => "",
+  "without" => array(),
   "no-colour" => false,
 );
 
@@ -61,6 +62,11 @@ for ($i = 2; $i < count($argv); $i++) {
 
     case "--rake-args":
       $options['rake-args'] = $argv[$i+1];
+      $i++;
+      continue;
+
+    case "--without":
+      $options['without'][] = $argv[$i+1];
       $i++;
       continue;
 

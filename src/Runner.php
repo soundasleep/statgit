@@ -176,7 +176,12 @@ class Runner {
 
   function checkOut($hash) {
     $this->logger->log("Checking out commit '" . $hash . "'...");
-    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout " . escapeshellarg($hash));
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git reset --hard && git checkout " . escapeshellarg($hash) . " && git reset --hard " . escapeshellarg($hash));
+
+    // remove any without files
+    foreach ($this->options["without"] as $without_dir) {
+      $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && (rm -r " . escapeshellarg($without_dir) . " || true)");
+    }
   }
 
   function trimCommits() {
@@ -387,7 +392,7 @@ class Runner {
     }
 
     if (isset($this->stats['summary']['gemfile'])) {
-      $this->logger->log("Updating information from rubygems...");
+      $this->logger->log($this->colour("green", "Updating information from rubygems..."));
 
       foreach ($this->stats['summary']['gemfile']['dependencies'] as $dependency) {
         if (!isset($this->database["rubygems"][$dependency])) {

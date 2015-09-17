@@ -45,6 +45,7 @@ when generating statistics.
 
 * For large code bases: use `--last` to restrict the number of commits.
 * For generating specs of just your specs, for example: use `<project>/spec` instead of `<project>`
+* For removing directories before running any specs: use `--without dir1 --without dir2`
 
 ## Examples
 

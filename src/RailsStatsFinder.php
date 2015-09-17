@@ -100,9 +100,6 @@ class RailsStatsFinder extends \PhpParser\NodeVisitorAbstract {
     if (file_exists($temp) && $routes = file($temp)) {
       $this->stats["routes"] = count($routes) - 1;
     }
-
-    // reset any Gemfile.lock changes
-    $this->passthru("cd " . escapeshellarg($this->root) . " && git reset --hard origin/master");
   }
 
   function passthru($cmd) {
