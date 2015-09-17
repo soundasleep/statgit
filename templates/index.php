@@ -42,6 +42,12 @@
   <?php if ($database['rubystats']) { ?>
     <li><a href="ruby.html">Ruby statistics</a></li>
   <?php } ?>
+  <?php if ($database['rails']) { ?>
+    <li><a href="rails.html">Ruby on Rails statistics</a></li>
+  <?php } ?>
+  <?php if ($database['rspec']) { ?>
+    <li><a href="rspec.html">Rspec statistics</a></li>
+  <?php } ?>
   <?php if ($stats['summary']['composer']) { ?>
     <li><a href="composer.html">Composer statistics</a></li>
   <?php } ?>

@@ -28,9 +28,13 @@ $options = array(
   "timezone" => "UTC",
   "force-php-stats" => false,
   "force-ruby-stats" => false,
+  "force-rails-stats" => false,
+  "force-rspec-stats" => false,
   "force-diff-stats" => false,
   "force-composer-stats" => false,
   "force-gemfile-stats" => false,
+  "rake-args" => "",
+  "no-colour" => false,
 );
 
 // overwrite options as necessary
@@ -55,12 +59,24 @@ for ($i = 2; $i < count($argv); $i++) {
       $i++;
       continue;
 
+    case "--rake-args":
+      $options['rake-args'] = $argv[$i+1];
+      $i++;
+      continue;
+
     case "--debug":
       $options['debug'] = true;
       continue;
 
+    case "--no-colour":
+    case "--no-color":
+      $options['no-colour'] = true;
+      continue;
+
     case "--force-php-stats":
     case "--force-ruby-stats":
+    case "--force-rails-stats":
+    case "--force-rspec-stats":
     case "--force-diff-stats":
     case "--force-composer-stats":
     case "--force-gemfile-stats":

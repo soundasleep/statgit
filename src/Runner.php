@@ -11,9 +11,34 @@ class Runner {
     date_default_timezone_set($this->options["timezone"]);
   }
 
+  function colour($colour, $str) {
+    if ($this->options["no-colour"]) {
+      return $str;
+    } else {
+      switch ($colour) {
+        case "red":
+          return chr(27) . "[31m" . $str . chr(27) . "[0m";
+        case "green":
+          return chr(27) . "[32m" . $str . chr(27) . "[0m";
+        case "yellow":
+          return chr(27) . "[33m" . $str . chr(27) . "[0m";
+        case "blue":
+          return chr(27) . "[34m" . $str . chr(27) . "[0m";
+        case "purple":
+          return chr(27) . "[35m" . $str . chr(27) . "[0m";
+        case "cyan":
+          return chr(27) . "[36m" . $str . chr(27) . "[0m";
+        case "white":
+          return chr(27) . "[37m" . $str . chr(27) . "[0m";
+        default:
+          return $str;
+      }
+    }
+  }
+
   function passthru($cmd) {
     $return = -1;
-    $this->logger->log(">>> " . $cmd, $return);
+    $this->logger->log($this->colour("cyan", ">>> " . $cmd), $return);
     passthru($cmd, $return);
     if ($return !== 0) {
       throw new \Exception("passthru '$cmd' returned '$return'");
@@ -39,13 +64,13 @@ class Runner {
   }
 
   function updateGit() {
-    $this->logger->log("Pulling latest from remote...");
+    $this->logger->log($this->colour("green", "Pulling latest from remote..."));
     $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git pull origin master");
   }
 
   // get a list of all files that exist
   function updateFiles() {
-    $this->logger->log("Finding files...");
+    $this->logger->log($this->colour("green", "Finding files..."));
     $this->database["files"] = $this->findAllFiles($this->options["root"], $this->options["root"]);
     $this->logger->log("Found " . number_format(count($this->database["files"])) . " files");
   }
@@ -124,7 +149,7 @@ class Runner {
   }
 
   function exportRemotes() {
-    $this->logger->log("Exporting remotes...");
+    $this->logger->log($this->colour("green", "Exporting remotes..."));
 
     $temp = $this->getTempFile();
 
@@ -161,6 +186,44 @@ class Runner {
     }
   }
 
+  function loadCloc($dir) {
+    // now lets do some basic stats with cloc
+    $temp = $this->getTempFile();
+    $this->passthru("cloc --csv --quiet " . escapeshellarg($dir) . " > " . escapeshellarg($temp));
+
+    $csv = file($temp);
+    $stats = array();
+
+    $i = 0;
+    foreach ($csv as $line) {
+      if (!trim($line)) {
+        continue;
+      }
+
+      if ($i++ == 0) {
+        $rows = str_getcsv(trim($line));
+
+        $languageid = array_search("language", $rows);
+      } else {
+        $columns = str_getcsv(trim($line));
+        $statrow = array();
+        $language = null;
+        foreach ($rows as $j => $value) {
+          if (isset($columns[$j])) {
+            $statrow[$value] = $columns[$j];
+          }
+          if ($j == $languageid) {
+            $language = $columns[$j];
+          }
+        }
+        $stats[$language] = $statrow;
+      }
+    }
+    unlink($temp);
+
+    return $stats;
+  }
+
   function iterateOverEachCommit() {
     if (!isset($this->database["stats"])) {
       $this->database["stats"] = array();
@@ -168,54 +231,30 @@ class Runner {
     if (!isset($this->database["phpstats"])) {
       $this->database["phpstats"] = array();
     }
+    if (!isset($this->database["rubystats"])) {
+      $this->database["rubystats"] = array();
+    }
+    if (!isset($this->database["rails"])) {
+      $this->database["rails"] = array();
+    }
     if (!isset($this->database["diffs"])) {
       $this->database["diffs"] = array();
     }
 
+    $commit_i = 0;
     foreach ($this->database["commits"] as $commit) {
+      $commit_i += 1;
       if (!isset($this->database['stats'][$commit['hash']])) {
+        $this->logger->log("");
+        $this->logger->log($this->colour("yellow", "Commit " . $commit['hash'] . " (" . sprintf("%0.1f%%", 100 * $commit_i / count($this->database['commits'])) . ")"));
+
         $this->checkOut($commit['hash']);
 
-        // now lets do some basic stats with cloc
-        $temp = $this->getTempFile();
-        $this->passthru("cloc --csv --quiet " . escapeshellarg($this->options["root"]) . " > " . escapeshellarg($temp));
-
-        $csv = file($temp);
-        $stats = array();
-
-        $i = 0;
-        foreach ($csv as $line) {
-          if (!trim($line)) {
-            continue;
-          }
-
-          if ($i++ == 0) {
-            $rows = str_getcsv(trim($line));
-
-            $languageid = array_search("language", $rows);
-          } else {
-            $columns = str_getcsv(trim($line));
-            $statrow = array();
-            $language = null;
-            foreach ($rows as $j => $value) {
-              if (isset($columns[$j])) {
-                $statrow[$value] = $columns[$j];
-              }
-              if ($j == $languageid) {
-                $language = $columns[$j];
-              }
-            }
-            $stats[$language] = $statrow;
-          }
-        }
-
         // store
-        $this->database['stats'][$commit['hash']] = $stats;
-        unlink($temp);
+        $this->database['stats'][$commit['hash']] = $this->loadCloc($this->options["root"]);
 
         // store database
         $this->saveLocalDatabase();
-
       }
 
       // if there were any PHP files, calculate PHP statistics
@@ -232,7 +271,6 @@ class Runner {
 
           // store database
           $this->saveLocalDatabase();
-
         }
       }
 
@@ -250,7 +288,42 @@ class Runner {
 
           // store database
           $this->saveLocalDatabase();
+        }
+      }
 
+      // if there were any Ruby files, calculate Rails statistics
+      if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
+        if (!isset($this->database['rails'][$commit['hash']]) || $this->options["force-rails-stats"]) {
+          $this->checkOut($commit['hash']);
+
+          // find Rails stats
+          $rails = new RailsStatsFinder($this->options["root"], $this->logger, $this->options);
+          $this->logger->log("Generating Rails statistics...");
+          $this->database['rails'][$commit['hash']] = $rails->compile();
+
+          $this->logger->log("Found " .
+              number_format($this->database['rails'][$commit['hash']]['controllers']) . " controllers and " .
+              number_format($this->database['rails'][$commit['hash']]['routes']) . " routes");
+
+          // store database
+          $this->saveLocalDatabase();
+        }
+      }
+
+      // if there were any Ruby files, calculate Rspec statistics
+      if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
+        if (!isset($this->database['rspec'][$commit['hash']]) || $this->options["force-rspec-stats"]) {
+          $this->checkOut($commit['hash']);
+
+          // find Rspec stats
+          $rspec = new RspecStatsFinder($this->options["root"], $this->logger, $this->options);
+          $this->logger->log("Generating rspec statistics...");
+          $this->database['rspec'][$commit['hash']] = $rspec->compile();
+
+          $this->logger->log("Found " . number_format($this->database['rspec'][$commit['hash']]['its']) . " specs");
+
+          // store database
+          $this->saveLocalDatabase();
         }
       }
 
@@ -271,7 +344,6 @@ class Runner {
 
         // store database
         $this->saveLocalDatabase();
-
       }
 
       // calculate composer statistics
@@ -296,7 +368,7 @@ class Runner {
         $this->logger->log("Generating Gemfile statistics...");
         $this->database['gemfile'][$commit['hash']] = $gemfilestats->compile();
 
-        $this->logger->log("Found " . number_format($this->database['gemfile'][$commit['hash']]['specs']) . " specs");
+        $this->logger->log("Found " . number_format($this->database['gemfile'][$commit['hash']]['specs']) . " dependencies");
 
         // store database
         $this->saveLocalDatabase();
@@ -355,13 +427,13 @@ class Runner {
     $stats['file_revisions'] = new FileRevisionsStats($this->database);
 
     foreach ($stats as $key => $summary) {
-      $this->logger->log("Compiling '$key' statistics...");
+      $this->logger->log($this->colour("green", "Compiling '$key' statistics..."));
       $this->stats[$key] = $summary->compile();
     }
   }
 
   function generateHTML() {
-    $this->logger->log("Generating HTML...");
+    $this->logger->log($this->colour("green", "Generating HTML..."));
 
     $generator = new HtmlGenerator($this->database, $this->stats, $this->logger, $this->options['output']);
     $generator->generate();
