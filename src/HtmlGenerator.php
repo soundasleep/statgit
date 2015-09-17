@@ -44,12 +44,22 @@ class HtmlGenerator {
         $author);
     }
 
+    foreach ($this->database['stats'][$this->stats['summary']['last_hash']] as $language) {
+      $this->generateFile("language",
+        $this->output . $this->languageLink($language),
+        $language);
+    }
+
     // copy over CSS
     copy(__DIR__ . "/../templates/default.css", $this->output . "default.css");
   }
 
   function authorLink($author) {
-    return $this->safe("developer_" . $author['email'] . ".html");
+    return $this->safe("developer_" . $author['email']) . ".html";
+  }
+
+  function languageLink($language) {
+    return $this->safe("language_" . $language['language']) . ".html";
   }
 
   function generateFile($template, $_file = false, $argument = array()) {
@@ -70,6 +80,9 @@ class HtmlGenerator {
         break;
       case "languages":
         $title = "Statgit - Language Statistics";
+        break;
+      case "languages":
+        $title = "Statgit - Language Statistics - $argument[language]";
         break;
       case "php":
         $title = "Statgit - PHP Statistics";

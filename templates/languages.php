@@ -44,7 +44,9 @@ $this->renderPieChart($rows, "chart_languages", "Lines of Code");
 
 foreach ($commit as $language => $value) {
   echo "<tr>";
-  echo "<th>" . htmlspecialchars($language) . "</th>";
+  echo "<th class=\"language\">";
+  echo $this->linkTo($this->languageLink($value), htmlspecialchars($language));
+  echo "</th>";
   echo "<td>" . number_format($value['files']) . " (" . sprintf("%0.2f%%", 100 * $value['files'] / $stats['summary']['total_files']) . ")</td>";
   echo "<td>" . number_format($value['code']) . " (" . sprintf("%0.2f%%", 100 * $value['code'] / $stats['summary']['total_loc']) . ")</td>";
   echo "<td>" . number_format($value['code'] / $value['files'], 1) . "</td>";
