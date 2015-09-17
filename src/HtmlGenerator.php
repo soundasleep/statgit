@@ -34,14 +34,14 @@ class HtmlGenerator {
     $this->generateFile("ruby");
     $this->generateFile("rails");
     $this->generateFile("rspec");
-    $this->generateFile("developers");
+    $this->generateFile("authors");
     $this->generateFile("composer");
     $this->generateFile("gemfile");
     $this->generateFile("churn");
 
     // generate related files
     foreach ($this->stats['summary']['authors'] as $email => $author) {
-      $this->generateFile("developer",
+      $this->generateFile("author",
         $this->output . $this->authorLink($author),
         $author);
     }
@@ -98,11 +98,11 @@ class HtmlGenerator {
       case "rspec":
         $title = "Statgit - Rspec Statistics";
         break;
-      case "developers":
-        $title = "Statgit - Developer Statistics";
+      case "authors":
+        $title = "Statgit - Author Statistics";
         break;
-      case "developer":
-        $title = "Statgit - Developer Statistics - $argument[email]";
+      case "author":
+        $title = "Statgit - Author Statistics - $argument[email]";
         break;
       case "composer":
         $title = "Statgit - Composer Statistics";

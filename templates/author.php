@@ -4,7 +4,7 @@ $author = $argument;
 
 <div class="breadcrumb">
   <a href="index.html">Statgit</a> &gt;&gt;
-  <a href="developers.html">Developers</a> &gt;&gt;
+  <a href="authors.html">Authors</a> &gt;&gt;
 </div>
 <h1><?php echo htmlspecialchars($author['email']); ?></h1>
 
@@ -39,7 +39,7 @@ $author = $argument;
 <?php
 
 $commit_email = $author['email'];
-require(__DIR__ . "/_developer_activity.php");
+require(__DIR__ . "/_author_activity.php");
 
 ?>
 

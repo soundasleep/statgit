@@ -1,25 +1,25 @@
 <div class="breadcrumb">
   <a href="index.html">Statgit</a> &gt;&gt;
 </div>
-<h1>Developers</h1>
+<h1>Authors</h1>
 
 <dl>
-  <dt>Total committers</dt>
+  <dt>Total authors</dt>
   <dd><?php echo number_format($stats['summary']['author_count']); ?></dd>
 </dl>
 
 <?php
 
 $commit_email = false;
-require(__DIR__ . "/_developer_activity.php");
+require(__DIR__ . "/_author_activity.php");
 
 ?>
 
-<h2>Top Developers</h2>
+<h2>Top Authors</h2>
 
 <table class="statistics">
   <thead>
-    <tr><th>Developer</th><th>Commits</th><th>Changes</th><th>Last Commit</th></tr>
+    <tr><th>Author</th><th>Commits</th><th>Changes</th><th>Last Commit</th></tr>
   </thead>
   <tbody>
 <?php

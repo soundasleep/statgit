@@ -41,7 +41,7 @@ class TagCloudStats extends StatisticsGenerator {
 
         $words = preg_split("/[^\\w]+/i", $words);  // TODO do we want to preg_split based on word boundaries instead?
         foreach ($words as $w) {
-          if (strlen($w) >= 3 /* ignore connecting words */) {
+          if (strlen($w) >= 3 /* ignore connecting words */ && !in_array($w, $this->smallWords())) {
             if (!isset($allwords[$w])) {
               $allwords[$w] = array('word' => $w, 'count' => 0);
             }
@@ -76,6 +76,14 @@ class TagCloudStats extends StatisticsGenerator {
     }
 
     return array_keys($result);
+  }
+
+  function smallWords() {
+    return array(
+      "and",
+      "or",
+      "the",
+    );
   }
 
 }

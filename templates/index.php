@@ -26,13 +26,13 @@
   <dt>Total lines of code</dt>
   <dd><?php echo number_format($stats['summary']['total_loc']); ?></dd>
 
-  <dt>Developers</dt>
+  <dt>Authors</dt>
   <dd><?php echo number_format($stats['summary']['author_count']); ?></dd>
 
 </dl>
 
 <ul class="navigation">
-  <li><a href="developers.html">Developers</a></li>
+  <li><a href="authors.html">Authors</a></li>
   <li><a href="loc.html">Lines of code</a></li>
   <li><a href="languages.html">Language statistics</a></li>
   <li><a href="files.html">File statistics</a></li>

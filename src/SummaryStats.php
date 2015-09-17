@@ -13,7 +13,7 @@ class SummaryStats extends StatisticsGenerator {
   function compile() {
     $data = array();
     $data['generated'] = date('r');
-    $data['authors'] = $this->getDevelopers();
+    $data['authors'] = $this->getAuthors();
     $data['author_count'] = count($data['authors']);
     $data['commits'] = count($this->database['commits']);
 
@@ -81,12 +81,12 @@ class SummaryStats extends StatisticsGenerator {
     return $result;
   }
 
-  function getDevelopers() {
-    $developers = array();
+  function getAuthors() {
+    $authors = array();
 
     foreach ($this->database['commits'] as $commit) {
-      if (!isset($developers[$commit['author_email']])) {
-        $developers[$commit['author_email']] = array(
+      if (!isset($authors[$commit['author_email']])) {
+        $authors[$commit['author_email']] = array(
           'email' => $commit['author_email'],
           'name' => $commit['author_name'],
           'first_commit' => $commit['author_date'],
@@ -103,7 +103,7 @@ class SummaryStats extends StatisticsGenerator {
         );
       }
 
-      $author = &$developers[$commit['author_email']];
+      $author = &$authors[$commit['author_email']];
 
       if (strtotime($commit['author_date']) < strtotime($author['first_commit'])) {
         $author['first_commit'] = $commit['author_date'];
@@ -118,28 +118,28 @@ class SummaryStats extends StatisticsGenerator {
     }
 
     foreach ($this->database['commits'] as $commit) {
-      $developers[$commit['author_email']]['commits'] += 1;
+      $authors[$commit['author_email']]['commits'] += 1;
 
       foreach ($this->database['diffs'][$commit['hash']] as $file => $diff) {
-        $developers[$commit['author_email']]['changed'] += $diff['added'];
-        $developers[$commit['author_email']]['changed'] += $diff['removed'];
-        $developers[$commit['author_email']]['added'] += $diff['added'];
-        $developers[$commit['author_email']]['removed'] += $diff['removed'];
+        $authors[$commit['author_email']]['changed'] += $diff['added'];
+        $authors[$commit['author_email']]['changed'] += $diff['removed'];
+        $authors[$commit['author_email']]['added'] += $diff['added'];
+        $authors[$commit['author_email']]['removed'] += $diff['removed'];
 
-        if (!isset($developers[$commit['author_email']]['files'][$file])) {
-          $developers[$commit['author_email']]['files'][$file] = 0;
+        if (!isset($authors[$commit['author_email']]['files'][$file])) {
+          $authors[$commit['author_email']]['files'][$file] = 0;
         }
 
-        $developers[$commit['author_email']]['files'][$file] += 1;
+        $authors[$commit['author_email']]['files'][$file] += 1;
       }
     }
 
-    foreach (array_keys($developers) as $email) {
-      arsort($developers[$email]['files']);
-      $developers[$email]['files'] = array_slice($developers[$email]['files'], 0, 20, true /* preserve_keys */);
+    foreach (array_keys($authors) as $email) {
+      arsort($authors[$email]['files']);
+      $authors[$email]['files'] = array_slice($authors[$email]['files'], 0, 20, true /* preserve_keys */);
     }
 
-    return $developers;
+    return $authors;
   }
 
   function getBorderCommits() {
