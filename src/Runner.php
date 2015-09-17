@@ -331,7 +331,7 @@ class Runner {
   }
 
   function loadRubygem($rubygem) {
-    if (!preg_match("/[A-Za-z0-9\.\-_]+/", $rubygem)) {
+    if (!preg_match("/^[A-Za-z0-9\.\-_]+$/", $rubygem)) {
       // invalid gem name: https://github.com/rubygems/rubygems.org/blob/master/lib/patterns.rb
       return false;
     }

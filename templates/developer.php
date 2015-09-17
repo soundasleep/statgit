@@ -64,9 +64,10 @@ $this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800
   <tbody>
 <?php
 
-foreach ($author['files'] as $file => $commits) {
+foreach ($author['files'] as $filename => $commits) {
+  $exists = $stats['file_revisions'][$filename]['exists'];
   echo "<tr>";
-  echo "<th class=\"filename\">" . htmlspecialchars($file) . "</th>";
+  echo "<th class=\"filename\"><span class=\"file" . ($exists ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
   echo "<td>" . number_format($commits) . "</td>";
   echo "</tr>\n";
 }
