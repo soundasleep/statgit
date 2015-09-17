@@ -36,22 +36,10 @@ $author = $argument;
   </dd>
 </dl>
 
-<h2>Commit Activity</h2>
-
 <?php
 
-$rows = array();
-foreach ($database['commits'] as $commit) {
-  if ($commit['author_email'] == $author['email']) {
-    $date = $commit['author_date'];
-    $x = date('Y-m-d', strtotime($date));
-    $y = sprintf("%0.2f", date('H', strtotime($date)) + (date('m', strtotime($date)) * (1/60)));
-
-    $rows[] = array($x, $y);
-  }
-}
-
-$this->renderScatterChart($rows, "Hour", "chart_commits", "Commit Activity", 800, 300);
+$commit_email = $author['email'];
+require(__DIR__ . "/_developer_activity.php");
 
 ?>
 
