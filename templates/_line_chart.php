@@ -40,7 +40,8 @@ ksort($rows);
     var options = {
       width: <?php echo $width; ?>,
       height: <?php echo $height; ?>,
-      vAxis: {minValue: 0},
+      hAxis: {title: 'Date'},
+      vAxis: {title: <?php echo json_encode($title); ?>, minValue: 0},
       chartArea: {width: '80%', height: '70%', left: 50, top: 25}
     };
 

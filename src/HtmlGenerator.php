@@ -160,6 +160,10 @@ class HtmlGenerator {
     require(__DIR__ . "/../templates/_pie_chart.php");
   }
 
+  function renderHistogramChart($rows, $heading, $id, $title, $width = 600, $height = 400) {
+    require(__DIR__ . "/../templates/_histogram_chart.php");
+  }
+
   function renderStackedAreaChart($rows, $headings, $id, $title, $width = 600, $height = 400) {
     require(__DIR__ . "/../templates/_stacked_chart.php");
   }

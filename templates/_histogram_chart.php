@@ -14,12 +14,10 @@
 
     // Create the data table.
     var data = google.visualization.arrayToDataTable([
-      ['Date', <?php echo json_encode($heading); ?>]
-      <?php foreach ($rows as $row) {
-        $date = strtotime($row[0]);
-        array_shift($row);
+      ['Key', <?php echo json_encode($heading); ?>]
+      <?php foreach ($rows as $key => $value) {
         # echo ",\n[new Date(", date('Y', $date), ", ", date('m', $date), "-1, ", date('d', $date) . "), " . implode(", ", $row) . "]";
-        echo ",\n[" . json_encode(date('Y-m-d', $date)) . ", " . implode(", ", $row) . "]";
+        echo ",\n[" . json_encode($key) . ", " . json_encode($value) . "]";
       } ?>
     ]);
 
@@ -27,7 +25,7 @@
     var options = {
       width: <?php echo $width; ?>,
       height: <?php echo $height; ?>,
-      hAxis: {title: 'Date'},
+      hAxis: {title: <?php echo json_encode($title); ?>},
       vAxis: {title: <?php echo json_encode($heading); ?>, minValue: 0},
       chartArea: {width: '80%', height: '70%', left: 50, top: 25}
     };
