@@ -30,6 +30,7 @@ $options = array(
   "force-ruby-stats" => false,
   "force-rails-stats" => false,
   "force-rspec-stats" => false,
+  "force-cucumber-stats" => false,
   "force-diff-stats" => false,
   "force-composer-stats" => false,
   "force-gemfile-stats" => false,
@@ -83,6 +84,7 @@ for ($i = 2; $i < count($argv); $i++) {
     case "--force-ruby-stats":
     case "--force-rails-stats":
     case "--force-rspec-stats":
+    case "--force-cucumber-stats":
     case "--force-diff-stats":
     case "--force-composer-stats":
     case "--force-gemfile-stats":

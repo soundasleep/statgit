@@ -39,11 +39,12 @@ class SummaryStats extends StatisticsGenerator {
     $data['language_top'] = $top['language'];
     $data['language_top_loc'] = $top['code'];
 
-    if (isset($this->database['composer'][$data['last_hash']])) {
-      $data['composer'] = $this->database['composer'][$data['last_hash']];
-    }
-    if (isset($this->database['gemfile'][$data['last_hash']])) {
-      $data['gemfile'] = $this->database['gemfile'][$data['last_hash']];
+    $last = array("phpstats", "rubystats", "rails", "rspec",
+        "cucumber", "composer", "gemfile");
+    foreach ($last as $key) {
+      if (isset($this->database[$key][$data['last_hash']])) {
+        $data[$key] = $this->database[$key][$data['last_hash']];
+      }
     }
 
     $data['days'] = array();

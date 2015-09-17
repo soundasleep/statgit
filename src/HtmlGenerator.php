@@ -34,6 +34,7 @@ class HtmlGenerator {
     $this->generateFile("ruby");
     $this->generateFile("rails");
     $this->generateFile("rspec");
+    $this->generateFile("cucumber");
     $this->generateFile("authors");
     $this->generateFile("composer");
     $this->generateFile("gemfile");
@@ -97,6 +98,9 @@ class HtmlGenerator {
         break;
       case "rspec":
         $title = "Statgit - Rspec Statistics";
+        break;
+      case "cucumber":
+        $title = "Statgit - Cucumber Statistics";
         break;
       case "authors":
         $title = "Statgit - Author Statistics";

@@ -334,6 +334,23 @@ class Runner {
         }
       }
 
+      // if there were any Ruby files, calculate Cucumber statistics
+      if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
+        if (!isset($this->database['cucumber'][$commit['hash']]) || $this->options["force-cucumber-stats"]) {
+          $this->checkOut($commit['hash']);
+
+          // find cucumber stats
+          $cucumber = new cucumberStatsFinder($this->options["root"], $this->logger, $this->options);
+          $this->logger->log("Generating cucumber statistics...");
+          $this->database['cucumber'][$commit['hash']] = $cucumber->compile();
+
+          $this->logger->log("Found " . number_format($this->database['cucumber'][$commit['hash']]['features']) . " features");
+
+          // store database
+          $this->saveLocalDatabase();
+        }
+      }
+
       // calculate diff statistics
       if (!isset($this->database['diffs'][$commit['hash']]) || $this->options["force-diff-stats"]) {
         $this->checkOut($commit['hash']);
