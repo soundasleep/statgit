@@ -38,10 +38,6 @@ class RailsStatsFinder extends \PhpParser\NodeVisitorAbstract {
     // iterate over all files
     $this->iterateOver($this->root);
 
-    // find the routes
-    $this->stats["routes"] = 0;
-    $this->findRoutes();
-
     return $this->stats;
   }
 
@@ -84,30 +80,6 @@ class RailsStatsFinder extends \PhpParser\NodeVisitorAbstract {
       } else {
         $this->stats["views"] += 1;
       }
-    }
-  }
-
-  function getTempFile() {
-    return tempnam(sys_get_temp_dir(), "statgit_rails");
-  }
-
-  function findRoutes() {
-    $temp = $this->getTempFile();
-
-    $this->passthru("cd " . escapeshellarg($this->root) . " && " . $this->options["rake-args"] . " bin/rake routes > " . escapeshellarg($temp));
-    $this->logger->log("Reading '$temp'...");
-
-    if (file_exists($temp) && $routes = file($temp)) {
-      $this->stats["routes"] = count($routes) - 1;
-    }
-  }
-
-  function passthru($cmd) {
-    $return = -1;
-    $this->logger->log(">>> " . $cmd, $return);
-    passthru($cmd, $return);
-    if ($return !== 0) {
-      // throw new \Exception("passthru '$cmd' returned '$return'");
     }
   }
 

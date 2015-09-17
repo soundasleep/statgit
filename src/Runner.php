@@ -310,8 +310,7 @@ class Runner {
           $this->database['rails'][$commit['hash']] = $rails->compile();
 
           $this->logger->log("Found " .
-              number_format($this->database['rails'][$commit['hash']]['controllers']) . " controllers and " .
-              number_format($this->database['rails'][$commit['hash']]['routes']) . " routes");
+              number_format($this->database['rails'][$commit['hash']]['controllers']) . " controllers");
 
           // store database
           $this->saveLocalDatabase();
