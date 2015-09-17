@@ -344,7 +344,7 @@ class Runner {
         $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git show --numstat > " . escapeshellarg($temp));
 
         // find diff stats
-        $diffstats = new DiffStatsFinder($this->logger);
+        $diffstats = new DiffStatsFinder($this->logger, $this->options["without"]);
         $stats = $diffstats->compile($temp);
 
         $this->database['diffs'][$commit['hash']] = $stats;
