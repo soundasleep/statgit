@@ -78,7 +78,7 @@ foreach ($commit as $language => $value) {
 // first find all languages ever used
 $languages = array();
 foreach ($database['stats'] as $commit) {
-  $languages = array_unique(array_merge(array_keys($commit), $languages));
+  $languages = array_values(array_unique(array_merge(array_keys($commit), $languages)));
 }
 
 $rows = array();

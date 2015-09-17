@@ -1,3 +1,8 @@
+<?php
+/* we should sort all rows before printing out any rows */
+ksort($rows);
+?>
+
 <div id="<?php echo $id; ?>" style="width: <?php echo $width; ?>px; height: <?php echo $height; ?>px;"></div>
 
 <script type="text/javascript">
