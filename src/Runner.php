@@ -237,6 +237,9 @@ class Runner {
     if (!isset($this->database["rails"])) {
       $this->database["rails"] = array();
     }
+    if (!isset($this->database["rspec"])) {
+      $this->database["rspec"] = array();
+    }
     if (!isset($this->database["diffs"])) {
       $this->database["diffs"] = array();
     }

@@ -1,7 +1,7 @@
 <div class="breadcrumb">
   <a href="index.html">Statgit</a> &gt;&gt;
 </div>
-<h1>Ruby Statistics</h1>
+<h1>Rspec Statistics</h1>
 
 <?php
 /* bail early if there are none */
