@@ -69,7 +69,7 @@ foreach ($database['commits'] as $commit) {
     continue;
   }
 
-  $value = sprintf("%0.1f", $database['phpstats'][$commit['hash']]['statements'] / $database['stats'][$commit['hash']]['PHP']['files']);
+  $value = sprintf("%0.2f", $database['phpstats'][$commit['hash']]['statements'] / $database['stats'][$commit['hash']]['PHP']['files']);
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
 
@@ -114,7 +114,7 @@ foreach ($database['commits'] as $commit) {
   if ($database['phpstats'][$commit['hash']]['classes'] == 0) {
     continue;
   }
-  $value = sprintf("%0.1f", $database['phpstats'][$commit['hash']]['class_methods'] / $database['phpstats'][$commit['hash']]['classes']);
+  $value = sprintf("%0.2f", $database['phpstats'][$commit['hash']]['class_methods'] / $database['phpstats'][$commit['hash']]['classes']);
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
 
@@ -198,7 +198,7 @@ foreach ($database['commits'] as $commit) {
     continue;
   }
 
-  $value = sprintf("%0.1f", $database['stats'][$commit['hash']]['PHP']['code'] / $functions);
+  $value = sprintf("%0.2f", $database['stats'][$commit['hash']]['PHP']['code'] / $functions);
   $rows[date('Y-m-d', strtotime($date))] = array($date, $value);
 }
 

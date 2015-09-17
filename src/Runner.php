@@ -222,7 +222,7 @@ class Runner {
 
       // if there were any PHP files, calculate PHP statistics
       if (isset($this->database['stats'][$commit['hash']]['PHP'])) {
-        if (!isset($this->database['phpstats'][$commit['hash']])) {
+        if (!isset($this->database['phpstats'][$commit['hash']]) || $this->options["force-php-stats"]) {
           $this->checkOut($commit['hash']);
 
           // find PHP stats
@@ -231,6 +231,24 @@ class Runner {
           $this->database['phpstats'][$commit['hash']] = $phpstats->compile();
 
           $this->logger->log("Found " . number_format($this->database['phpstats'][$commit['hash']]['statements']) . " statements");
+
+          // store database
+          $this->saveLocalDatabase();
+
+        }
+      }
+
+      // if there were any Ruby files, calculate Ruby statistics
+      if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
+        if (!isset($this->database['rubystats'][$commit['hash']]) || $this->options["force-ruby-stats"]) {
+          $this->checkOut($commit['hash']);
+
+          // find Ruby stats
+          $rubystats = new RubyStatsFinder($this->options["root"], $this->logger);
+          $this->logger->log("Generating Ruby statistics...");
+          $this->database['rubystats'][$commit['hash']] = $rubystats->compile();
+
+          $this->logger->log("Found " . number_format($this->database['rubystats'][$commit['hash']]['classes']) . " classes");
 
           // store database
           $this->saveLocalDatabase();

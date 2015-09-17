@@ -25,6 +25,8 @@ $options = array(
   "skip_git" => false,
   "debug" => false,
   "last" => -1,
+  "force-php-stats" => false,
+  "force-ruby-stats" => false,
 );
 
 // overwrite options as necessary
@@ -46,6 +48,14 @@ for ($i = 2; $i < count($argv); $i++) {
 
     case "--debug":
       $options['debug'] = true;
+      continue;
+
+    case "--force-php-stats":
+      $options['force-php-stats'] = true;
+      continue;
+
+    case "--force-ruby-stats":
+      $options['force-ruby-stats'] = true;
       continue;
 
     case "--last":

@@ -39,6 +39,9 @@
   <?php if ($database['phpstats']) { ?>
     <li><a href="php.html">PHP statistics</a></li>
   <?php } ?>
+  <?php if ($database['rubystats']) { ?>
+    <li><a href="ruby.html">Ruby statistics</a></li>
+  <?php } ?>
   <?php if ($stats['summary']['composer']) { ?>
     <li><a href="composer.html">Composer statistics</a></li>
   <?php } ?>
