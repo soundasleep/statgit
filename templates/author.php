@@ -54,9 +54,10 @@ require(__DIR__ . "/_author_activity.php");
 
 foreach ($author['files'] as $filename => $commits) {
   $exists = $stats['file_revisions'][$filename]['exists'];
+
   echo "<tr>";
   echo "<th class=\"filename\"><span class=\"file" . ($exists ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
-  echo "<td>" . number_format($commits) . "</td>";
+  echo "<td class=\"number\">" . number_format($commits) . "</td>";
   echo "</tr>\n";
 }
 
@@ -70,3 +71,25 @@ foreach ($author['files'] as $filename => $commits) {
 $tags = $stats['tagcloud'][$author['email']];
 require(__DIR__ . "/_tag_cloud.php");
 ?>
+
+<h2>Most Owned Files</h2>
+
+<table class="statistics">
+  <thead>
+    <tr><th>File</th><th>Blame %</th></tr>
+  </thead>
+  <tbody>
+<?php
+
+foreach ($author['blame_files'] as $filename => $blame) {
+  $exists = $stats['file_revisions'][$filename]['exists'];
+
+  echo "<tr>";
+  echo "<th class=\"filename\"><span class=\"file" . ($exists ? " exists" : " deleted") . "\">" . htmlspecialchars($filename) . "</span></th>";
+  echo "<td class=\"number\">" . sprintf("%0.2f%%", 100 * $blame) . "</td>";
+  echo "</tr>\n";
+}
+
+?>
+  </tbody>
+</table>

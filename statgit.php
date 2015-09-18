@@ -118,6 +118,7 @@ if (!$options['skip_git']) {
   $statgit->exportRemotes();
   $statgit->trimCommits();
   $statgit->iterateOverEachCommit();
+  $statgit->generateBlame();
 }
 $statgit->compileStats();
 $statgit->updateRubygems();

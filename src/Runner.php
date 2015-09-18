@@ -441,6 +441,51 @@ class Runner {
     }
   }
 
+  function generateBlame() {
+    $this->logger->log($this->colour("green", "Generating blame..."));
+
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout master");
+
+    if (!isset($this->database["blame"])) {
+      $this->database["blame"] = array();
+    }
+
+    foreach ($this->database["files"] as $file => $size) {
+      if (file_exists($this->options["root"] . "/" . $file)) {
+        $this->database["blame"][$file] = $this->generateBlameFor($file);
+      }
+    }
+  }
+
+  function generateBlameFor($filename) {
+    $temp = $this->getTempFile();
+
+    // wrap in (|| true) to prevent missing but present files (e.g. in .gitignore) crashing blame
+    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && (git blame --line-porcelain " . escapeshellarg($filename) . " || true) > " . escapeshellarg($temp));
+    $this->logger->log("Reading '$temp'...");
+
+    $blame = file($temp);
+    $blame[] = "fff 0";   // last line
+    $authors = array();
+    foreach ($blame as $line) {
+      $bits = explode(" ", $line, 2);
+      switch ($bits[0]) {
+        case "author-mail":
+          $author = trim($bits[1]);
+          $author = substr($author, 1, strlen($author) - 2);
+          if (!isset($authors[$author])) {
+            $authors[$author] = 0;
+          }
+          $authors[$author] += 1;
+          break;
+      }
+    }
+
+    unlink($temp);
+
+    return $authors;
+  }
+
   // temporary, only stored for this run
   var $stats = array();
 
@@ -465,7 +510,6 @@ class Runner {
     if ($this->options['debug']) {
       print_r($this->stats);
     }
-
   }
 
 }

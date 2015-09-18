@@ -45,3 +45,23 @@ foreach ($sorted as $email => $author) {
 ?>
   </tbody>
 </table>
+
+<h2>Ownership <small>(blame)</small></h2>
+
+<?php
+
+$sorted = $stats["summary"]["authors"];
+uasort($sorted, function ($a, $b) {
+  if ($a["blame"] == $b["blame"]) {
+    return 0;
+  }
+  return $a["blame"] > $b["blame"] ? -1 : 1;
+});
+$rows = array();
+foreach ($sorted as $author) {
+  $rows[$author['email']] = $author['blame'];
+}
+
+$this->renderPieChart($rows, "chart_authors_pie_blame", "Lines");
+
+?>

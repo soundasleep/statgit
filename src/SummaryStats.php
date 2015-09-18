@@ -95,12 +95,14 @@ class SummaryStats extends StatisticsGenerator {
           'first_subject' => $commit['subject'],
           'last_subject' => $commit['suject'],
           'first_hash' => $commit['hash'],
-          'last_ash' => $commit['hash'],
+          'last_hash' => $commit['hash'],
           'commits' => 0,
           'files' => array(),
           'changed' => 0,
           'added' => 0,
           'removed' => 0,
+          'blame' => 0,
+          'blame_files' => array(),
         );
       }
 
@@ -138,6 +140,23 @@ class SummaryStats extends StatisticsGenerator {
     foreach (array_keys($authors) as $email) {
       arsort($authors[$email]['files']);
       $authors[$email]['files'] = array_slice($authors[$email]['files'], 0, 20, true /* preserve_keys */);
+    }
+
+    foreach ($this->database["blame"] as $file => $blame) {
+      $all_lines = 0;
+      foreach ($blame as $email => $lines) {
+        $all_lines += $lines;
+      }
+
+      foreach ($blame as $email => $lines) {
+        $authors[$email]['blame'] += $lines;
+        $authors[$email]['blame_files'][$file] = ($lines / $all_lines);
+      }
+    }
+
+    foreach (array_keys($authors) as $email) {
+      arsort($authors[$email]['blame_files']);
+      $authors[$email]['blame_files'] = array_slice($authors[$email]['blame_files'], 0, 20, true /* preserve_keys */);
     }
 
     return $authors;
