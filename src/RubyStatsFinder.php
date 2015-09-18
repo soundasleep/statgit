@@ -67,8 +67,8 @@ class RubyStatsFinder extends \PhpParser\NodeVisitorAbstract {
     $source = "\n" . $source . "\n";
 
     // try in a horrible way to remove all strings
-    $source = preg_replace("/\"[^\"]+?\"/", "string", $source);
-    $source = preg_replace("/'[^'']+?'/", "string", $source);
+    $source = preg_replace("/\"[^\"\n]+?\"/", "string", $source);
+    $source = preg_replace("/'[^'\n]+?'/", "string", $source);
 
     // now do horrible regular expressions
     $identifier = "[A-Za-z0-9_]+";

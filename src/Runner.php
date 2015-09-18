@@ -502,6 +502,9 @@ class Runner {
         case "author-mail":
           $author = trim($bits[1]);
           $author = substr($author, 1, strlen($author) - 2);
+          if (!$author) {
+            continue;
+          }
           if (!isset($authors[$author])) {
             $authors[$author] = 0;
           }
