@@ -186,7 +186,7 @@ class Runner {
 
   function trimCommits() {
     if ($this->options['last'] > 0) {
-      $this->logger->log("Selecting last " . $this->options['last'] . " commits...");
+      $this->logger->log($this->colour("green", "Selecting last " . $this->options['last'] . " commits..."));
       $this->database["commits"] = array_slice($this->database["commits"], -$this->options["last"]);
     }
   }
@@ -460,18 +460,29 @@ class Runner {
   }
 
   function generateBlame() {
-    $this->logger->log($this->colour("green", "Generating blame..."));
+    $last_commit = array_slice($this->database["commits"], -1);
+    $last_hash = $last_commit[0]["hash"];
 
-    $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout master");
-
-    if (!isset($this->database["blame"])) {
+    if (!isset($this->database["blame_hash"]) || $this->database["blame_hash"] != $last_hash) {
+      // reset the entire blame
       $this->database["blame"] = array();
-    }
 
-    foreach ($this->database["files"] as $file => $size) {
-      if (file_exists($this->options["root"] . "/" . $file)) {
-        $this->database["blame"][$file] = $this->generateBlameFor($file);
+      $this->logger->log($this->colour("green", "Generating blame..."));
+
+      $this->passthru("cd " . escapeshellarg($this->options["root"]) . " && git checkout master");
+
+      foreach ($this->database["files"] as $file => $size) {
+        if (!isset($this->database["blame"][$file])) {
+          if (file_exists($this->options["root"] . "/" . $file)) {
+            $this->database["blame"][$file] = $this->generateBlameFor($file);
+          }
+        }
       }
+
+      $this->database["blame_hash"] = $last_hash;
+
+      // store database
+      $this->saveLocalDatabase();
     }
   }
 
