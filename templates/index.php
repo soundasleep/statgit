@@ -45,6 +45,9 @@
   <?php if ($stats['summary']['rails'] && $stats['summary']['rails']['controllers']) { ?>
     <li><a href="rails.html">Ruby on Rails statistics</a></li>
   <?php } ?>
+  <?php if ($stats['summary']['schema'] && $stats['summary']['schema']['tables']) { ?>
+    <li><a href="schema.html">Schema statistics</a></li>
+  <?php } ?>
   <?php if ($stats['summary']['rspec'] && $stats['summary']['rspec']['its']) { ?>
     <li><a href="rspec.html">Rspec statistics</a></li>
   <?php } ?>

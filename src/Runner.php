@@ -317,6 +317,24 @@ class Runner {
         }
       }
 
+      // if there were any Ruby files, calculate Schema statistics
+      if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
+        if (!isset($this->database['schema'][$commit['hash']]) || $this->options["force-schema-stats"]) {
+          $this->checkOut($commit['hash']);
+
+          // find Schema stats
+          $schema = new SchemaStatsFinder($this->options["root"], $this->logger, $this->options);
+          $this->logger->log("Generating schema statistics...");
+          $this->database['schema'][$commit['hash']] = $schema->compile();
+
+          $this->logger->log("Found " .
+              number_format($this->database['schema'][$commit['hash']]['tables']) . " tables");
+
+          // store database
+          $this->saveLocalDatabase();
+        }
+      }
+
       // if there were any Ruby files, calculate Rspec statistics
       if (isset($this->database['stats'][$commit['hash']]['Ruby'])) {
         if (!isset($this->database['rspec'][$commit['hash']]) || $this->options["force-rspec-stats"]) {

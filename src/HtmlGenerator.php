@@ -33,6 +33,7 @@ class HtmlGenerator {
     $this->generateFile("php");
     $this->generateFile("ruby");
     $this->generateFile("rails");
+    $this->generateFile("schema");
     $this->generateFile("rspec");
     $this->generateFile("cucumber");
     $this->generateFile("authors");

@@ -39,7 +39,7 @@ class SummaryStats extends StatisticsGenerator {
     $data['language_top'] = $top['language'];
     $data['language_top_loc'] = $top['code'];
 
-    $last = array("phpstats", "rubystats", "rails", "rspec",
+    $last = array("phpstats", "rubystats", "rails", "schema", "rspec",
         "cucumber", "composer", "gemfile");
     foreach ($last as $key) {
       if (isset($this->database[$key][$data['last_hash']])) {
