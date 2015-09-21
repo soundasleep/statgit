@@ -105,10 +105,12 @@ uasort($sorted, function ($a, $b) {
 });
 $rows = array();
 foreach ($sorted as $author) {
-  $rows[$author['email']] = $author['commits'];
+  if ($author["email"]) {
+    $rows[$author['email']] = $author['commits'];
+  }
 }
 
-$this->renderPieChart($rows, "chart_authors_pie_commits", "Commits");
+$this->renderPieChart($rows, "chart_authors_pie_commits", "Commits", 500, 300);
 
 ?>
 
@@ -123,10 +125,12 @@ uasort($sorted, function ($a, $b) {
 });
 $rows = array();
 foreach ($sorted as $author) {
-  $rows[$author['email']] = $author['changed'];
+  if ($author["email"]) {
+    $rows[$author['email']] = $author['changed'];
+  }
 }
 
-$this->renderPieChart($rows, "chart_authors_pie_changes", "Changes");
+$this->renderPieChart($rows, "chart_authors_pie_changes", "Changes", 500, 300);
 
 ?>
 
