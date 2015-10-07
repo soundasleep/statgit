@@ -60,7 +60,34 @@ class Runner {
     if (defined('JSON_PRETTY_PRINT')) {
       $args = JSON_PRETTY_PRINT;
     }
-    file_put_contents($this->options['database'], json_encode($this->database, $args));
+    $temp = $this->getTempFile();
+    $json = json_encode($this->database, $args);
+    if ($json === false) {
+      switch (json_last_error()) {
+        case JSON_ERROR_DEPTH:
+          throw new \Exception("JSON: The maximum stack depth has been exceeded");
+
+        case JSON_ERROR_SYNTAX:
+          throw new \Exception("JSON: Syntax error");
+
+        case JSON_ERROR_UTF8:
+          throw new \Exception("JSON: Malformed UTF-8 characters, possibly incorrectly encoded");
+
+        case JSON_ERROR_RECURSION:
+          throw new \Exception("JSON: One or more recursive references in the value to be encoded");
+
+        case JSON_ERROR_INF_OR_NAN:
+          throw new \Exception("JSON: One or more NAN or INF values in the value to be encoded");
+
+        case JSON_ERROR_UNSUPPORTED_TYPE:
+          throw new \Exception("JSON: A value of a type that cannot be encoded was given");
+
+        default:
+          throw new \Exception("JSON generation threw " . json_last_error());
+      }
+    }
+    file_put_contents($temp, $json);
+    rename($temp, $this->options['database']);
   }
 
   function updateGit() {
@@ -130,7 +157,7 @@ class Runner {
       $linebits = explode($specialCharacter, trim($line));
       $row = array();
       foreach (array_keys($formatBits) as $i => $key) {
-        $row[$key] = $linebits[$i];
+        $row[$key] = $this->fixUTF8($linebits[$i]);
       }
       $result[] = $row;
     }
@@ -142,6 +169,11 @@ class Runner {
 
     // delete temp file
     unlink($temp);
+  }
+
+  function fixUTF8($text) {
+    // remove any invalid UTF-8 characters
+    return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
   }
 
   function getTempFile() {

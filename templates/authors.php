@@ -34,6 +34,9 @@ uasort($sorted, function ($a, $b) {
 $sorted = array_splice($sorted, 0, 50);
 
 foreach ($sorted as $email => $author) {
+  if (!$author['email']) {
+    continue;
+  }
   echo "<tr>";
   echo "<th>" . $this->linkTo($this->authorLink($author), $author['email']) . "</th>";
   echo "<td class=\"number\">" . number_format($author['commits']) . "</td>";
