@@ -283,18 +283,18 @@ class Runner {
 
     $commit_i = 0;
     foreach ($this->database["commits"] as $commit) {
+      $changed = false;
+      $this->logger->log("");
+      $this->logger->log($this->colour("yellow", "Commit " . $commit['hash'] . " (" . sprintf("%0.1f%%", 100 * $commit_i / count($this->database['commits'])) . ")"));
+
       $commit_i += 1;
       if (!isset($this->database['stats'][$commit['hash']])) {
-        $this->logger->log("");
-        $this->logger->log($this->colour("yellow", "Commit " . $commit['hash'] . " (" . sprintf("%0.1f%%", 100 * $commit_i / count($this->database['commits'])) . ")"));
-
         $this->checkOut($commit['hash']);
 
         // store
         $this->database['stats'][$commit['hash']] = $this->loadCloc($this->options["root"]);
 
-        // store database
-        $this->saveLocalDatabase();
+        $changed = true;
       }
 
       // if there were any PHP files, calculate PHP statistics
@@ -309,8 +309,7 @@ class Runner {
 
           $this->logger->log("Found " . number_format($this->database['phpstats'][$commit['hash']]['statements']) . " statements");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -326,8 +325,7 @@ class Runner {
 
           $this->logger->log("Found " . number_format($this->database['rubystats'][$commit['hash']]['classes']) . " classes");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -344,8 +342,7 @@ class Runner {
           $this->logger->log("Found " .
               number_format($this->database['rails'][$commit['hash']]['controllers']) . " controllers");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -362,8 +359,7 @@ class Runner {
           $this->logger->log("Found " .
               number_format($this->database['schema'][$commit['hash']]['tables']) . " tables");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -379,8 +375,7 @@ class Runner {
 
           $this->logger->log("Found " . number_format($this->database['rspec'][$commit['hash']]['its']) . " specs");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -396,8 +391,7 @@ class Runner {
 
           $this->logger->log("Found " . number_format($this->database['cucumber'][$commit['hash']]['features']) . " features");
 
-          // store database
-          $this->saveLocalDatabase();
+          $changed = true;
         }
       }
 
@@ -416,8 +410,7 @@ class Runner {
         $this->database['diffs'][$commit['hash']] = $stats;
         $this->logger->log(number_format(count($stats)) . " files changed");
 
-        // store database
-        $this->saveLocalDatabase();
+        $changed = true;
       }
 
       // calculate composer statistics
@@ -429,8 +422,7 @@ class Runner {
         $this->logger->log("Generating Composer statistics...");
         $this->database['composer'][$commit['hash']] = $composerstats->compile();
 
-        // store database
-        $this->saveLocalDatabase();
+        $changed = true;
       }
 
       // calculate gemfile statistics
@@ -444,10 +436,13 @@ class Runner {
 
         $this->logger->log("Found " . number_format($this->database['gemfile'][$commit['hash']]['specs']) . " dependencies");
 
+        $changed = true;
+      }
+
+      if ($changed) {
         // store database
         $this->saveLocalDatabase();
       }
-
     }
 
   }
