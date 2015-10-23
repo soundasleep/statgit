@@ -41,6 +41,8 @@ when generating statistics.
 * `--debug`
 * `--timezone [s]` - use _s_ as the timezone, defaults to "UTC"
 
+To increase PHP's memory limit, use `php -d memory_limit=2400M -f statgit.php [options]`.
+
 ## Ideas
 
 * For large code bases: use `--last` to restrict the number of commits.
