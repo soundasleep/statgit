@@ -1,6 +1,7 @@
 <?php
 
 namespace Statgit;
+use PhpParser\ParserFactory;
 
 /**
  * Uses https://github.com/nikic/PHP-Parser/ to generate some
@@ -21,7 +22,7 @@ class PHPStatsFinder extends \PhpParser\NodeVisitorAbstract {
    * Return an array of statistics.
    */
   function compile() {
-    $this->parser = new \PhpParser\Parser(new \PhpParser\Lexer\Emulative);
+    $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7, new \PhpParser\Lexer\Emulative);
     $this->traverser = new \PhpParser\NodeTraverser;
 
     // add your visitor
