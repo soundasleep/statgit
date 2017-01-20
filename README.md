@@ -43,7 +43,7 @@ when generating statistics.
 
 To increase PHP's memory limit, use `php -d memory_limit=2400M -f statgit.php [options]`.
 
-## Ideas
+## Ideas for future work
 
 * For large code bases: use `--last` to restrict the number of commits.
 * For generating specs of just your specs, for example: use `<project>/spec` instead of `<project>`
@@ -52,3 +52,9 @@ To increase PHP's memory limit, use `php -d memory_limit=2400M -f statgit.php [o
 ## Examples
 
 * [Openclerk](http://openclerk.org/statgit/)
+
+## Running tests
+
+```
+vendor/bin/phpunit
+```
