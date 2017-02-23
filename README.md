@@ -1,4 +1,4 @@
-## NOTE This project has been deprecated in favour of [https://github.com/soundasleep/statgit2](statgit2).
+## NOTE This project has been deprecated in favour of [statgit2](https://github.com/soundasleep/statgit2).
 
 statgit
 =======
